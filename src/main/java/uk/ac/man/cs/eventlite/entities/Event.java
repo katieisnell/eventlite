@@ -2,12 +2,20 @@ package uk.ac.man.cs.eventlite.entities;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+@Entity
+@Table(name = "events")
 public class Event {
-
+	@Id
+	@GeneratedValue
 	private long id;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
