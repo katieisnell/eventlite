@@ -1,17 +1,17 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.io.InputStream;
+/*import java.io.InputStream;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;*/
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+//import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.ac.man.cs.eventlite.entities.Venue;
 
@@ -23,16 +23,22 @@ public class VenueServiceImpl implements VenueService {
 	private final static String DATA = "data/venues.json";*/
 
 	@Autowired
-	private VenueRepository venuerepository;
+	private VenueRepository venueRepository;
 	
 	@Override
 	public long count() {
-		return venuerepository.count();
+		return venueRepository.count();
 	}
 	
 	@Override
+	public Venue save(Venue venue){
+		return venueRepository.save(venue);	
+	}
+	
+	
+	@Override
 	public Iterable<Venue> findAll() {
-		return venuerepository.findAll();
+		return venueRepository.findAll();
 	}
 
 }
