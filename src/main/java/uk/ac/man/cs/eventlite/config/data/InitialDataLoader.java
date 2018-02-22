@@ -36,7 +36,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		if (venueService.count() <= 0) {
 			Venue kilburn = new Venue();
 			kilburn.setName("Kilburn Building");
-			kilburn.setId(1);
 			kilburn.setCapacity(200);
 			venueService.save(kilburn);
 		}
