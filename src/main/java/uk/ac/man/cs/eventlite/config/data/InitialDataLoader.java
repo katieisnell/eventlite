@@ -26,6 +26,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	@Autowired
 	private VenueService venueService;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
@@ -34,25 +35,26 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			return;
 		}
 
+		//Set dates to year + 1900, month, day, hour, minute
 		Event event1 = new Event();
 		event1.setName("COMP23412 Showcase, group G");
 		event1.setVenue(1);
-		event1.setDate(new Date());
-		event1.setTime(new Date());
+		event1.setDate(new Date(117, 10, 12, 11, 10));
+		event1.setTime(new Date(117, 10, 12, 11, 10));
 
 
 		Event event2 = new Event();
 		event2.setName("COMP23412 Showcase, group H");
 		event2.setVenue(1);
-		event2.setDate(new Date());
-		event2.setTime(new Date());
+		event2.setDate(new Date(105, 04, 1, 10, 10));
+		event2.setTime(new Date(105, 04, 1, 10, 10));
 
 		Event event3 = new Event();
 		event3.setName("COMP23412 Showcase, group F");
 		event3.setVenue(1);
-		event3.setDate(new Date());
-		event3.setTime(new Date());
-
+		event3.setDate(new Date(110, 03, 14, 5, 10));
+		event3.setTime(new Date(110, 03, 14, 5, 10));
+	
 		eventService.save(event1);
 		eventService.save(event2);
 		eventService.save(event3);
