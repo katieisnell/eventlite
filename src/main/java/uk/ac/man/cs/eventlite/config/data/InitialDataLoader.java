@@ -46,7 +46,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Event event2 = new Event();
 		event2.setName("COMP23412 Showcase, group H");
 		event2.setVenue(1);
-		event2.setDate(new Date(105, 04, 1, 10, 10));
+		event2.setDate(new Date(117, 10, 12, 11, 10));
 		event2.setTime(new Date(105, 04, 1, 10, 10));
 
 		Event event3 = new Event();
