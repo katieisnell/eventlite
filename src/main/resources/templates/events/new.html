@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>New</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Add a new event</h1>
+    
+    <form action="#" th:action="@{/events}" th:object="${events}" method="post">
+      <div class="form-group">
+        <label for="Event">Name of the event</label>
+        <input type="text"/>
+        <label for="Venue">Name of the venue</label>
+        <input type="text"/>
+        <label for="Date">Date</label>
+        <input type="text"/>
+        <label for="Time">Time</label>
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

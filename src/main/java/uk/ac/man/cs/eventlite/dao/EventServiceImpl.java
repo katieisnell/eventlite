@@ -30,4 +30,10 @@ public class EventServiceImpl implements EventService {
 	public void save(Event event) {
 		eventRepository.save(event);
 	}
+
+    @Override
+    public void delete(long id) {
+        eventRepository.delete(id);
+    
+    }
 }
