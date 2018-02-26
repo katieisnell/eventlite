@@ -24,10 +24,17 @@
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
+          <td>
+            <form th:action="@{/events/{num}(num=${e.id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+            </form>
+          </td>
         </tr>
       </tbody>
     </table>
-
+     <p>
+      <a class="btn btn-primary" role="button" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
+    </p>
   </div>
 
 </body>
