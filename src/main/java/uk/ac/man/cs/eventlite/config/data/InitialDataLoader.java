@@ -34,22 +34,27 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			return;
 		}
 
+		Venue kilburn = new Venue();
+		kilburn.setName("Kilburn Building");
+		kilburn.setCapacity(200);
+		venueService.save(kilburn);
+		
 		Event event1 = new Event();
 		event1.setName("COMP23412 Showcase, group G");
-		event1.setVenue(1);
+		event1.setVenue(kilburn);
 		event1.setDate(new Date());
 		event1.setTime(new Date());
 
 
 		Event event2 = new Event();
 		event2.setName("COMP23412 Showcase, group H");
-		event2.setVenue(1);
+		event2.setVenue(kilburn);
 		event2.setDate(new Date());
 		event2.setTime(new Date());
 
 		Event event3 = new Event();
 		event3.setName("COMP23412 Showcase, group F");
-		event3.setVenue(1);
+		event3.setVenue(kilburn);
 		event3.setDate(new Date());
 		event3.setTime(new Date());
 
@@ -57,12 +62,5 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		eventService.save(event2);
 		eventService.save(event3);
 
-		// Build and save initial models here.
-		if (venueService.count() <= 0) {
-			Venue kilburn = new Venue();
-			kilburn.setName("Kilburn Building");
-			kilburn.setCapacity(200);
-			venueService.save(kilburn);
-		}
 	}
 }
