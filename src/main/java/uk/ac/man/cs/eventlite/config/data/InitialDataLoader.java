@@ -59,12 +59,5 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		eventService.save(event2);
 		eventService.save(event3);
 
-		// Build and save initial models here.
-		if (venueService.count() <= 0) {
-			Venue kilburn = new Venue();
-			kilburn.setName("Kilburn Building");
-			kilburn.setCapacity(200);
-			venueService.save(kilburn);
-		}
 	}
 }

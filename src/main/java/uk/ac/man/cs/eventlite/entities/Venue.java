@@ -1,8 +1,11 @@
 package uk.ac.man.cs.eventlite.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +18,13 @@ public class Venue {
 	private String name;
 
 	private int capacity;
+	
+	@OneToMany
+	private List<Event> events;
+	
+	public List<Event> getEvents() {
+		return events;
+	}
 
 	public Venue() {
 	}
