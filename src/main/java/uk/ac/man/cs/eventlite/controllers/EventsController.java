@@ -25,17 +25,14 @@ public class EventsController {
 	@Autowired
 	private EventService eventService;
 
-	@Autowired
-	private VenueService venueService;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
 
 		model.addAttribute("events", eventService.findAll());
-		model.addAttribute("venues", venueService.findAll());
 
 		return "events/index";
 	}
+	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteEvent(@PathVariable("id") long id) {
