@@ -24,6 +24,9 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+	private VenueService venueService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
@@ -61,6 +64,8 @@ public class EventsController {
 	        if (!model.containsAttribute("events")) {
 	            model.addAttribute("events", new Event());
 	        }
+	        
+	        model.addAttribute("venues", venueService.findAll());
 
 	        return "events/new";
 	    }
