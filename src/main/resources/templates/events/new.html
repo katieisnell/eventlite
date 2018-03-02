@@ -9,22 +9,26 @@
   <div layout:fragment="content">
     <h1>Add a new event</h1>
     
+    
+        
     <form action="#" th:action="@{/events}" th:object="${events}" method="post">
       <div class="form-group">
-        <label for="Event">Name of the event</label>
-        <input type="text"/>
+        <label for="name">Name of the event</label>
+        <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
+        </br> 
+        <select id="venue" name="venue">
+        	<option th:each="venue : ${venues}"
+                th:value="${venue.id}"
+                th:text="${venue.name}+' : '+${venue.capacity}"> </option>
+    	</select>
+    	</br>
+    	<label for="date">Date</label>
+        <input class="form-control" type="date" name="date" id="date" placeholder="yyyy-mm-dd" autofocus="autofocus" />
         </br>
-        <label for="Venue">Name of the venue</label>
-        <input type="text"/>
-        </br>
-        <label for="Date">Date</label>
-        <input type="text"/>
-        </br>
-        <label for="Time">Time</label>
-        <input type="text"/>
-        </br>
+        <label for="name">Time</label>
+        <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss" autofocus="autofocus" />
+        </br>     
       </div>
-    
       <button class="btn btn-primary" type="submit"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
       <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>
