@@ -8,5 +8,7 @@ public interface EventService {
 
 	public Iterable<Event> findAll();
 	
+	public Iterable<Event> findAllByDateByName();
+	
 	public void save(Event event);
 }
