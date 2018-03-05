@@ -1,36 +1,116 @@
+
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title>New</title>
+  <style>
+  
+
+
+* {
+  box-sizing: border-box;
+}
+
+form {
+  padding: 1em;
+  background: #f9f9f9;
+  border: 1px solid #c1c1c1;
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+}
+form input {
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #9c9c9c;
+}
+form button {
+  background: lightgrey;
+  padding: 0.7em;
+  border: 0;
+}
+form button:hover {
+  background: gold;
+}
+
+label {
+  text-align: right;
+  display: block;
+  padding: 0.5em 1.5em 0.5em 0;
+}
+h1{
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 0.7em;
+  margin-bottom: 0.5rem;
+}
+input:focus {
+  outline: 3px solid gold;
+}
+
+@media (min-width: 400px) {
+  form {
+    overflow: hidden;
+  }
+
+  label {
+    float: left;
+    width: 200px;
+  }
+
+  input {
+    float: left;
+    width: calc(100% - 200px);
+  }
+  select{
+    float: left;
+    width: calc(100% - 200px);
+    padding: 0.7em;
+    margin-bottom: 0.5rem;
+  }
+
+  button {
+    float: right;
+    width: calc(100% - 200px);
+  }
+  #date{
+    float: left;
+    }
+}
+  
+  </style>
 </head>
 <body>
   <div layout:fragment="content">
     <h1>Add a new event</h1>
-    
-    
-        
     <form action="#" th:action="@{/events}" th:object="${events}" method="post">
       <div class="form-group">
-        <label for="name">Name of the event</label>
+        <label for="name">Name of the event :</label>
         <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
-        </br> 
+        <div id="venue_selection">
+        <label for="venue">Select a Venue :</label>
         <select id="venue" name="venue">
         	<option th:each="venue : ${venues}"
                 th:value="${venue.id}"
                 th:text="${venue.name}+' : '+${venue.capacity}"> </option>
     	</select>
-    	</br>
-    	<label for="date">Date</label>
+    	</div>
+    	<div id="date">
+    	<label for="date"> Date :</label>
         <input class="form-control" type="date" name="date" id="date" placeholder="yyyy-mm-dd" autofocus="autofocus" />
-        </br>
-        <label for="name">Time</label>
-        <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss" autofocus="autofocus" />
-        </br>     
+        <label for="name"> Time :</label>
+        <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss" autofocus="autofocus" />   
+        </div> 
       </div>
-      <button class="btn btn-primary" type="submit"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
-      <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
+      <button id="submit" type="submit">Save</button>
+      <button id="cancel" href="/events">Cancel</button>
     </form>
   </div>
 </body>
