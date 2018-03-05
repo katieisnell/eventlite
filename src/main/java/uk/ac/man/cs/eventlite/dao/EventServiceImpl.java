@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -27,8 +29,13 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public Iterable<Event> findAllByDateByName() {
-		return eventRepository.findByOrderByDateAscNameAsc();
+	public Iterable<Event> findFutureEvents() {
+		return eventRepository.findByDateAfterOrderByDateAscNameAsc(new Date());
+	}
+	
+	@Override
+	public Iterable<Event> findPastEvents() {
+		return eventRepository.findByDateBeforeOrderByDateDescNameAsc(new Date());
 	}
 	
 	@Override
