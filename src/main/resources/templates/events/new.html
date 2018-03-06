@@ -6,9 +6,6 @@
 <head>
   <title>New</title>
   <style>
-  
-
-
 * {
   box-sizing: border-box;
 }
@@ -86,16 +83,30 @@ input:focus {
 }
   
   </style>
+  <script>
+  function required(){
+    var empt1 = document.forms["form1"]["name"].value;
+    var empt2 = document.forms["form1"]["date"].value;
+    var empt3 = document.forms["form1"]["time"].value;
+    if (empt1 == ""||empt2 == ""||empt3 == "" ){
+      alert("The text fields marked with * cannot be empty");
+      return false;
+    }else{
+      return true; 
+    }
+  }
+  </script>
+  
 </head>
 <body>
   <div layout:fragment="content">
     <h1>Add a new event</h1>
-    <form action="#" th:action="@{/events}" th:object="${events}" method="post">
+    <form name= "form1" action="#" th:action="@{/events}" th:object="${events}" method="post" >
       <div class="form-group">
-        <label for="name">Name of the event :</label>
+        <label for="name">* Name of the event :</label>
         <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
         <div id="venue_selection">
-        <label for="venue">Select a Venue :</label>
+        <label for="venue">* Select a Venue :</label>
         <select id="venue" name="venue">
         	<option th:each="venue : ${venues}"
                 th:value="${venue.id}"
@@ -103,13 +114,13 @@ input:focus {
     	</select>
     	</div>
     	<div id="date">
-    	<label for="date"> Date :</label>
+    	<label for="date"> * Date :</label>
         <input class="form-control" type="date" name="date" id="date" placeholder="yyyy-mm-dd" autofocus="autofocus" />
-        <label for="name"> Time :</label>
+        <label for="name"> * Time :</label>
         <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss" autofocus="autofocus" />   
         </div> 
       </div>
-      <button id="submit" type="submit">Save</button>
+      <button id="submit" type="submit"onClick="return required()">Save</button>
       <button id="cancel" href="/events">Cancel</button>
     </form>
   </div>
