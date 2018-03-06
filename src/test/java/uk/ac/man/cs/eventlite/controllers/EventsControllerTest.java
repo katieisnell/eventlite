@@ -72,28 +72,28 @@ public class EventsControllerTest {
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> emptyList());
-		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		//when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
-		verify(venueService).findAll();
+		//verify(venueService).findAll();
 		verifyZeroInteractions(event);
-		verifyZeroInteractions(venue);
+		//verifyZeroInteractions(venue);
 	}
 
 	@Test
 	public void getIndexWithEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> singletonList(event));
-		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		//when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
-		verify(venueService).findAll();
+		//verify(venueService).findAll();
 		verifyZeroInteractions(event);
-		verifyZeroInteractions(venue);
+		//verifyZeroInteractions(venue);
 	}
 }
