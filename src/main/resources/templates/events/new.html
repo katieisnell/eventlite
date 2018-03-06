@@ -25,6 +25,11 @@ form input {
   background: #fff;
   border: 1px solid #9c9c9c;
 }
+form textarea {
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #9c9c9c;
+}
 form button {
   background: lightgrey;
   padding: 0.7em;
@@ -48,6 +53,9 @@ input {
   padding: 0.7em;
   margin-bottom: 0.5rem;
 }
+textarea:focus{
+ outline: 3px solid gold;
+}
 input:focus {
   outline: 3px solid gold;
 }
@@ -66,6 +74,13 @@ input:focus {
     float: left;
     width: calc(100% - 200px);
   }
+  
+  textarea{
+    float: left;
+    width: calc(100% - 200px);
+    height: 200px;
+  }
+  
   select{
     float: left;
     width: calc(100% - 200px);
@@ -85,11 +100,16 @@ input:focus {
   </style>
   <script>
   function required(){
-    var empt1 = document.forms["form1"]["name"].value;
-    var empt2 = document.forms["form1"]["date"].value;
-    var empt3 = document.forms["form1"]["time"].value;
-    if (empt1 == ""||empt2 == ""||empt3 == "" ){
+    var name = document.forms["form1"]["name"].value;
+    var date = document.forms["form1"]["date"].value;
+    var dateString = document.getElementById("date").value;
+    var inputDate = new Date(dateString);
+    var today = new Date();
+    if (name == ""||date == ""||!name.replace(/\s/g, '').length||!date.replace(/\s/g, '').length){
       alert("The text fields marked with * cannot be empty");
+      return false;
+    }else if(inputDate < today){
+      alert("The input date should be in the future");
       return false;
     }else{
       return true; 
@@ -103,10 +123,10 @@ input:focus {
     <h1>Add a new event</h1>
     <form name= "form1" action="#" th:action="@{/events}" th:object="${events}" method="post" >
       <div class="form-group">
-        <label for="name">* Name of the event :</label>
-        <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
+        <label for="name">*Name of the event :</label>
+        <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" maxlength="256"/>
         <div id="venue_selection">
-        <label for="venue">* Select a Venue :</label>
+        <label for="venue">*Select a Venue :</label>
         <select id="venue" name="venue">
         	<option th:each="venue : ${venues}"
                 th:value="${venue.id}"
@@ -114,10 +134,13 @@ input:focus {
     	</select>
     	</div>
     	<div id="date">
-    	<label for="date"> * Date :</label>
-        <input class="form-control" type="date" name="date" id="date" placeholder="yyyy-mm-dd" autofocus="autofocus" />
-        <label for="name"> * Time :</label>
-        <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss" autofocus="autofocus" />   
+    	<label for="date"> *Date :</label>
+        <input class="form-control" type="date" name="date" id="date" placeholder="yyyy-mm-dd"/>
+        <label for="name">  Time :</label>
+        <input class="form-control" type="time" name="time" id="time" placeholder="hh:ss"/>   
+        <label for"details">  Description :</label>
+        <textarea name="details" id="details" maxlength="500">
+        </textarea>
         </div> 
       </div>
       <button id="submit" type="submit" onClick="return required()">Save</button>
