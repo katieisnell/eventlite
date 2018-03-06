@@ -25,6 +25,11 @@
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
           <td>
+          	<form th:action="@{/events/{num}(num=${e.id})}" th:method="get">
+			<button type="submit" class="btn btn-primary"><i class="fa fa-edit" aria-hidden="true"></i> Update</button>
+			</form>
+		  </td>
+		  <td>
             <form th:action="@{/events/{num}(num=${e.id})}" th:method="delete">
             <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
             </form>

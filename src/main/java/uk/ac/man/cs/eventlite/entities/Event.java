@@ -9,7 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -20,14 +23,19 @@ public class Event {
 	@GeneratedValue
 	private long id;
 	
+	@NotNull(message = "There must be a date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
+	@Future
 	private Date date;
 	
 	@DateTimeFormat(pattern = "HH:mm")
 	@Temporal(TemporalType.TIME)
+	//@Future
 	private Date time;
 
+	@NotNull(message = "Should not be null")
+	@NotEmpty(message = "Should not be empty")
 	private String name;
 
 	@ManyToOne
