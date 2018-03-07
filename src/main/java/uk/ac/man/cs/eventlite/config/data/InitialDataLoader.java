@@ -59,10 +59,17 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		event3.setVenue(kilburn);
 		event3.setDate(new Date(110, 03, 14, 5, 10));
 		event3.setTime(new Date(110, 03, 14, 5, 10));
+		
+		Event event4 = new Event();
+		event4.setName("Adam");
+		event4.setVenue(kilburn);
+		event4.setDate(new Date(110, 03, 14, 5, 10));
+		event4.setTime(new Date(110, 03, 14, 5, 10));
 	
 		eventService.save(event1);
 		eventService.save(event2);
 		eventService.save(event3);
+		eventService.save(event4);
 
 	}
 }

@@ -9,4 +9,7 @@ public interface EventService {
 	public Iterable<Event> findAll();
 	
 	public void save(Event event);
+	
+	public Iterable<Event> listEventsByName(String name);
+
 }
