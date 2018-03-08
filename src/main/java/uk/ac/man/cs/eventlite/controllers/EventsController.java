@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -30,5 +31,15 @@ public class EventsController {
 
 		return "events/index";
 	}
+	
+	//Method for searching the database with an event name as a parameter
+	//Only whole event names match as per the specification
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String searchEventByName(@RequestParam(value = "search", required = false) String name, Model model) {
+        model.addAttribute("search", eventService.listEventsByName(name));
+        return "events/index";
+    }
+
+	
 
 }

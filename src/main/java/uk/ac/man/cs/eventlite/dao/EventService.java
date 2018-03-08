@@ -13,4 +13,7 @@ public interface EventService {
 	public Iterable<Event> findPastEvents();
 	
 	public void save(Event event);
+	
+	public Iterable<Event> listEventsByName(String name);
+
 }

@@ -126,6 +126,18 @@ public class EventsControllerTest {
 	}
 	
 	@Test
+	public void getIndexWithSpecificEventNames() throws Exception {
+		String testString = "Adam";
+		when(eventService.listEventsByName(testString)).thenReturn(Collections.<Event> singletonList(event));
+
+		mvc.perform(get("/events/search").param("search", testString).accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(handler().methodName("searchEventByName"));
+
+		verify(eventService).listEventsByName(testString);
+		verifyZeroInteractions(event);
+	}
+
+    @Test
 	public void getIndexWithFutureEvents() throws Exception {
 		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
