@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr th:each="e : ${events}" >
-          <td> <a th:href="@{events(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
+          <td> <a th:href="@{events/event(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>

@@ -15,6 +15,7 @@
           <th><i class="fa fa-bolt"></i> Event</th>
           <th><i class="fa fa-map-marker"></i> Venue</th>
           <th><i class="fa fa-calendar"></i> Date</th>
+          <th><i class="fa fa-clock-o"></i> Time</th>
           <th><i class="fa fa-info-circle"></i> Description</th>
         </tr>
       </thead>
@@ -23,6 +24,7 @@
           <td th:text="${e.name}">My Event</td>
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
+           <td th:text="${{e.time}}">Event time</td>
           <td th:text="${{e.details}}">Event details</td>
         </tr>
       </tbody>
