@@ -46,7 +46,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		event1.setVenue(kilburn);
 		event1.setDate(new Date(117, 10, 12, 11, 10));
 		event1.setTime(new Date(117, 10, 12, 11, 10));
-		event1.setDetails("best event");
+		//event1.setDetails("best event");
 
 
 		Event event2 = new Event();

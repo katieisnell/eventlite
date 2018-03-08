@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -16,16 +17,21 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+	private VenueService venueService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
 
 		model.addAttribute("events", eventService.findAll());
+		model.addAttribute("venues", venueService.findAll());
+
 
 		return "events/index";
 	}
 
-	@RequestMapping(produces = { MediaType.TEXT_HTML_VALUE }, params = "ename", method = RequestMethod.GET)
+	@RequestMapping(value="/event", method = RequestMethod.GET)
 		public String eventPage(Model model, @RequestParam("ename") long ename) {
 			model.addAttribute("event", eventService.findOne(ename));
 			return "events/EventPage";
