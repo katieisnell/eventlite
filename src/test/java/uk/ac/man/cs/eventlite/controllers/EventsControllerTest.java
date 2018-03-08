@@ -20,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.Filter;
 
@@ -87,27 +89,27 @@ public class EventsControllerTest {
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> emptyList());
-		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		//when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
 		verifyZeroInteractions(event);
-		verifyZeroInteractions(venue);
+		//verifyZeroInteractions(venue);
 	}
 
 	@Test
 	public void getIndexWithEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> singletonList(event));
-		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		//when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
 		verifyZeroInteractions(event);
-		verifyZeroInteractions(venue);
+		//verifyZeroInteractions(venue);
 	}
 	
 	@Test
@@ -154,7 +156,6 @@ public class EventsControllerTest {
 		parameters.add("name", "lecture");
 		parameters.add("date", "2018-10-15");
 
-
 		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
@@ -165,4 +166,16 @@ public class EventsControllerTest {
 		verify(eventService).save(arg.capture());
 		assertThat("lecture", equalTo(arg.getValue().getName()));
 	}
+	
+	@Test
+  public void deleteEvent() throws Exception {
+	  MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+    parameters.add("name", "abc");
+    parameters.add("date", "2018-10-15");
+    mvc.perform(MockMvcRequestBuilders.delete("/events/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+              .params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
+              .andExpect(status().isFound()).andExpect(content().string(""))
+              .andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors());
+  }
 }
