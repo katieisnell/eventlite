@@ -21,12 +21,13 @@ public class EventsController {
 	@Autowired
 	private VenueService venueService;
 
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
+
+		model.addAttribute("futureEvents", eventService.findFutureEvents());
+		model.addAttribute("pastEvents", eventService.findPastEvents());
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
-
 
 		return "events/index";
 	}
