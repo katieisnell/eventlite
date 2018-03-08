@@ -131,7 +131,7 @@ public class EventsControllerTest {
 		when(eventService.listEventsByName(testString)).thenReturn(Collections.<Event> singletonList(event));
 
 		mvc.perform(get("/events/search").param("search", testString).accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
-				.andExpect(view().name("events/index")).andExpect(handler().methodName("searchEventByName"));
+				.andExpect(view().name("events/search")).andExpect(handler().methodName("searchEventByName"));
 
 		verify(eventService).listEventsByName(testString);
 		verifyZeroInteractions(event);
