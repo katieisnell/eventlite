@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -29,8 +30,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.EventLite;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.entities.Event;
@@ -83,4 +86,13 @@ public class EventsControllerApiTest {
 
 		verify(eventService).findAll();
 	}
+	
+	@Test
+  public void deletEvent() throws Exception {
+      mvc.perform(
+             MockMvcRequestBuilders.delete("/api/events/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+             .contentType(MediaType.APPLICATION_JSON)
+             .content("{ \"name\": \"\" }").accept(MediaType.APPLICATION_JSON))
+     .andExpect(status().isNoContent());
+  }
 }
