@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -93,7 +95,6 @@ public class EventsControllerTest {
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
-		//verify(venueService).findAll();
 		verifyZeroInteractions(event);
 		//verifyZeroInteractions(venue);
 	}
@@ -107,7 +108,6 @@ public class EventsControllerTest {
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
-		//verify(venueService).findAll();
 		verifyZeroInteractions(event);
 		//verifyZeroInteractions(venue);
 	}
@@ -121,22 +121,50 @@ public class EventsControllerTest {
 	}
 	
 	@Test
+	public void postEmptyEvent() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "").accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("events/new"))
+		.andExpect(model().attributeHasFieldErrors("event", "name"))
+		.andExpect(handler().methodName("createEvent"));
+
+		verify(eventService, never()).save(event);
+	}
+	
+	@Test
+	public void postPastEvent() throws Exception {
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("name", "lecture");
+		parameters.add("date", "2010-10-15");
+		
+		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.params(parameters).accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("events/new"))
+		.andExpect(model().attributeHasFieldErrors("event", "date"))
+		.andExpect(handler().methodName("createEvent"));
+
+		verify(eventService, never()).save(event);
+	}
+	
+	@Test
 	public void postEvent() throws Exception{
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-		parameters.add("name", "abc");
+		parameters.add("name", "lecture");
 		parameters.add("date", "2018-10-15");
-		
+
 		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isFound()).andExpect(content().string(""))
-		.andExpect(view().name("redirect:/events"))
-		.andExpect(handler().methodName("createEvent"));
+		.andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors())
+		.andExpect(handler().methodName("createEvent")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
-		assertThat("abc", equalTo(arg.getValue().getName()));
+		assertThat("lecture", equalTo(arg.getValue().getName()));
 	}
 	
 	@Test

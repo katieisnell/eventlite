@@ -36,6 +36,32 @@ public class EventsController {
 		return "events/index";
 	}
 	
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String newEvent(Model model,@ModelAttribute("event")Event event) {
+		if (!model.containsAttribute("events")) {
+			model.addAttribute("events", new Event());
+		}
+		
+		model.addAttribute("venues", venueService.findAll());
+
+		return "events/new";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public String createEvent(@RequestBody @Valid @ModelAttribute Event event,
+			BindingResult errors, Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			model.addAttribute("events", event);
+			model.addAttribute("venues", venueService.findAll());
+			return "events/new";
+		}
+
+		eventService.save(event);
+		redirectAttrs.addFlashAttribute("ok_message", "New event added.");
+
+		return "redirect:/events";
+	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteEvent(@PathVariable("id") long id) {
@@ -44,30 +70,5 @@ public class EventsController {
 	    return "redirect:/events";
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String createEvent(@RequestBody @Valid @ModelAttribute Event event,
-            BindingResult errors, Model model, RedirectAttributes redirectAttrs) {
-
-        if (errors.hasErrors()) {
-            model.addAttribute("events", event);
-            return "events/new";
-        }
-
-        eventService.save(event);
-        redirectAttrs.addFlashAttribute("ok_message", "New event added.");
-
-        return "redirect:/events";
-    }
-	
-	 @RequestMapping(value = "/new", method = RequestMethod.GET)
-	 public String newEvent(Model model) {
-	        if (!model.containsAttribute("events")) {
-	            model.addAttribute("events", new Event());
-	        }
-	        
-	        model.addAttribute("venues", venueService.findAll());
-
-	        return "events/new";
-	    }
 
 }
