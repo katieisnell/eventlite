@@ -42,4 +42,10 @@ public class EventsController {
 
 	
 
+	@RequestMapping(value="/event", method = RequestMethod.GET)
+		public String eventPage(Model model, @RequestParam("ename") long ename) {
+			model.addAttribute("event", eventService.findOne(ename));
+			return "events/EventPage";
+		}
+	
 }

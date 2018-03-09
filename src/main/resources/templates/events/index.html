@@ -9,6 +9,7 @@
   <div layout:fragment="content">
     <h1>All events</h1>
     
+
     
     <div class="container">
     <h2>Search for Events</h2>
@@ -18,6 +19,7 @@
     </form>
 	</div>
     <h1>Upcoming events</h1>
+
 
     <table class="table table-striped table-hover">
       <thead>
@@ -29,6 +31,10 @@
         </tr>
       </thead>
       <tbody>
+
+        <tr th:each="e : ${events}" >
+          <td> <a th:href="@{events/event(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
+
         <tr th:each="e : ${futureEvents}">
           <td th:text="${e.name}">My Event</td>
           <td th:text="${e.venue.name}">Event venue</td>

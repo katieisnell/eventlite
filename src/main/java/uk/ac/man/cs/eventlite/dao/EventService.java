@@ -14,6 +14,8 @@ public interface EventService {
 	
 	public void save(Event event);
 	
+	public Event findOne(long event);
+
 	public Iterable<Event> listEventsByName(String name);
 
 }

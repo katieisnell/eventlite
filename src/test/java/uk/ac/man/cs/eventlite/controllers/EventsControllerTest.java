@@ -126,6 +126,17 @@ public class EventsControllerTest {
 	}
 	
 	@Test
+	public void getDetailedList() throws Exception {
+		when(event.getId()).thenReturn(1L);
+		when(eventService.findOne(event.getId())).thenReturn(event);
+
+		mvc.perform(get("/events/event").param("ename", event.getId() + "").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/EventPage")).andExpect(handler().methodName("eventPage"));
+
+		verify(eventService).findOne(event.getId());
+	}
+	
+	@Test
 	public void getIndexWithSpecificEventNames() throws Exception {
 		String testString = "Adam";
 		when(eventService.listEventsByName(testString)).thenReturn(Collections.<Event> singletonList(event));
