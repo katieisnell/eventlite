@@ -82,6 +82,34 @@ public class EventsControllerTest {
 		verifyZeroInteractions(event);
 		verifyZeroInteractions(venue);
 	}
+	
+	@Test
+	public void getIndexWhenNoFutureEvents() throws Exception {
+		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> emptyList());
+		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+
+		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
+
+		verify(eventService).findFutureEvents();
+		verify(venueService).findAll();
+		verifyZeroInteractions(event);
+		verifyZeroInteractions(venue);
+	}
+	
+	@Test
+	public void getIndexWhenNoPastEvents() throws Exception {
+		when(eventService.findPastEvents()).thenReturn(Collections.<Event> emptyList());
+		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+
+		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
+
+		verify(eventService).findPastEvents();
+		verify(venueService).findAll();
+		verifyZeroInteractions(event);
+		verifyZeroInteractions(venue);
+	}
 
 	@Test
 	public void getIndexWithEvents() throws Exception {
@@ -106,6 +134,46 @@ public class EventsControllerTest {
 				.andExpect(view().name("events/EventPage")).andExpect(handler().methodName("eventPage"));
 
 		verify(eventService).findOne(event.getId());
+	}
+	
+	@Test
+	public void getIndexWithSpecificEventNames() throws Exception {
+		String testString = "Adam";
+		when(eventService.listEventsByName(testString)).thenReturn(Collections.<Event> singletonList(event));
+
+		mvc.perform(get("/events/search").param("search", testString).accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/search")).andExpect(handler().methodName("searchEventByName"));
+
+		verify(eventService).listEventsByName(testString);
+		verifyZeroInteractions(event);
+	}
+
+    @Test
+	public void getIndexWithFutureEvents() throws Exception {
+		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> singletonList(event));
+		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+
+		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
+
+		verify(eventService).findFutureEvents();
+		verify(venueService).findAll();
+		verifyZeroInteractions(event);
+		verifyZeroInteractions(venue);
+	}
+	
+	@Test
+	public void getIndexWithPastEvents() throws Exception {
+		when(eventService.findPastEvents()).thenReturn(Collections.<Event> singletonList(event));
+		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+
+		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
+
+		verify(eventService).findPastEvents();
+		verify(venueService).findAll();
+		verifyZeroInteractions(event);
+		verifyZeroInteractions(venue);
 	}
 	
 }

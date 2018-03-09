@@ -24,12 +24,23 @@ public class EventsController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
 
+		model.addAttribute("futureEvents", eventService.findFutureEvents());
+		model.addAttribute("pastEvents", eventService.findPastEvents());
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
 
-
 		return "events/index";
 	}
+	
+	//Method for searching the database with an event name as a parameter
+	//Only whole event names match as per the specification
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String searchEventByName(@RequestParam(value = "search", required = false) String name, Model model) {
+        model.addAttribute("search", eventService.listEventsByName(name));
+        return "events/search";
+    }
+
+	
 
 	@RequestMapping(value="/event", method = RequestMethod.GET)
 		public String eventPage(Model model, @RequestParam("ename") long ename) {
