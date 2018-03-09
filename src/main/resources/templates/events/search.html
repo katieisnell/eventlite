@@ -25,13 +25,15 @@
 		          <th><i class="fa fa-clock-o"></i> Time</th>
 		        </tr>
                 <tr th:if="${not #lists.isEmpty(search)}" th:each="event: ${search}">
-                    <td th:text="${event.name}">
-                    <td th:text="${event.venue.name}">name</td>
-                    <td th:text="${event.date}">surname</td>
-                    <td th:text="${event.time}">surname</td>
+                    <!--<td th:text="${event.name}">-->
+                    <td> <a th:href="@{/events/event(ename=${event.id})}"> <p th:text="${event.name}"> Event name</p> </a> </td>
+                    <td th:text="${event.venue.name}">Venue</td>
+                    <td th:text="${event.date}">Date</td>
+                    <td th:text="${event.time}">Time</td>
                 </tr>
                <tr th:if="${#lists.isEmpty(search)}" th:each="e : ${events}">
-		          <td th:text="${e.name}">My Event</td>
+		          <!--<td th:text="${e.name}">My Event</td>-->
+		          <td> <a th:href="@{/events/event(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
 		          <td th:text="${e.venue.name}">Event venue</td>
 		          <td th:text="${{e.date}}">Event date</td>
 		          <td th:text="${{e.time}}">Event time</td>
