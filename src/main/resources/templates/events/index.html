@@ -25,8 +25,7 @@
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
           <td>
-          	<form th:action="@{/events/{num}(num=${e.id})}" th:method="get">
-			<button type="submit" class="btn btn-primary"><i class="fa fa-edit" aria-hidden="true"></i> Update</button>
+          	<a class="btn btn-primary" role="button" th:href="@{'/events/'+ ${e.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update event</a>
 			</form>
 		  </td>
 		  <td>

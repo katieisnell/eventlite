@@ -1,6 +1,5 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import java.text.ParseException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +7,17 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.entities.Venue;
+//import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -42,15 +37,15 @@ public class EventsController {
 		return "events/index";
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET )
-	public String update(@PathVariable("id") long id, Model model) 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String updateR(@PathVariable("id") long id, Model model) 
 	{
 		model.addAttribute("event", eventService.findById(id));
 		model.addAttribute("venues", venueService.findAll());
 	    return "events/update";
 	}
 
-	@RequestMapping(value= "/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@RequestMapping(value= "update/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String updateSave(@PathVariable("id") long id,
 			@RequestBody @Valid @ModelAttribute Event event,
             BindingResult errors, 
