@@ -24,7 +24,7 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
-	
+
 	@Autowired
 	private VenueService venueService;
 
@@ -35,18 +35,18 @@ public class EventsController {
 
 		return "events/index";
 	}
-	
+
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String newEvent(Model model,@ModelAttribute("event")Event event) {
 		if (!model.containsAttribute("events")) {
 			model.addAttribute("events", new Event());
 		}
-		
+
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/new";
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createEvent(@RequestBody @Valid @ModelAttribute Event event,
 			BindingResult errors, Model model, RedirectAttributes redirectAttrs) {
@@ -62,13 +62,39 @@ public class EventsController {
 
 		return "redirect:/events";
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteEvent(@PathVariable("id") long id) {
-	    
+
 	    eventService.delete(id);
 	    return "redirect:/events";
 	}
-	
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  public String updateR(@PathVariable("id") long id, Model model)
+  {
+    model.addAttribute("event", eventService.findById(id));
+    model.addAttribute("venues", venueService.findAll());
+      return "events/update";
+  }
+
+  @RequestMapping(value= "update/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  public String updateSave(@PathVariable("id") long id,
+      @RequestBody @Valid @ModelAttribute Event event,
+            BindingResult errors,
+            Model model,
+            RedirectAttributes redirectAttrs)
+  {
+    if (errors.hasErrors())
+    {
+      model.addAttribute("venues", venueService.findAll());
+            return "events/update";
+        }
+
+        eventService.save(event);
+
+        redirectAttrs.addFlashAttribute("ok_message", "Event succesfully updated");
+        return "redirect:/events";
+  }
 
 }

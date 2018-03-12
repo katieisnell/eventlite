@@ -11,4 +11,6 @@ public interface EventService {
 	public void save(Event event);
 
     public void delete(long id);
+    
+    public Event findById(long id);
 }

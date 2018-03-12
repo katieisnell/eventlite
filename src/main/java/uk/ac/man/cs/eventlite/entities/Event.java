@@ -11,12 +11,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 
 @Entity
 @Table(name = "events")
@@ -33,15 +30,18 @@ public class Event {
 	
 	@DateTimeFormat(pattern = "HH:mm")
 	@Temporal(TemporalType.TIME)
-	//@Future
 	private Date time;
 
 	@NotNull(message = "Should not be null")
 	@NotEmpty(message = "Should not be empty")
+	@Size(max = 256, message = "The name should have a maximum of 256 characters")
 	private String name;
 
 	@ManyToOne
 	private Venue venue;
+	
+	@Size(max = 500, message = "The description should have a maximum of 500 characters")
+	private String description;
 
 	public Event() {
 	}
@@ -84,5 +84,13 @@ public class Event {
 
 	public void setVenue(Venue venue) {
 		this.venue = venue;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
