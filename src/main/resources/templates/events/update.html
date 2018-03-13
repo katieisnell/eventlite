@@ -48,7 +48,7 @@ input {
 
   label {
     float: left;
-    width: calc(100% - 10px);
+    width: calc(100% - 200px);
   }
 
   input {
@@ -71,9 +71,11 @@ input {
   a{
   width: calc(100% - 200px);
   }
- #venue{
-  resize: height;
-  width: calc(100% - 50px);
+    #addVenue{
+  float: right;
+  width: calc(100% - 450px);
+  padding: 0.7em;
+    margin-bottom: 0.5rem;
   }
   </style>
 </head>
@@ -99,21 +101,23 @@ input {
                 	th:text="${venue.name}+' : '+${venue.capacity}">
                 </option>
     		</select>
+    	<div>
     	<button id="addVenue" type=""> Add Venue</button>
+    	</div>
        </div>
        <div>
       <div class="form-group" th:classappend="${#fields.hasErrors('date')}? has-error">
         <label for="date">Event date :</label>
         <input class="form-control" type="text" name="date" id="date" th:field="*{date}" th:value="${date}"/>
-        <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">errors</p>
+        <p class="text-danger" th:if="${#fields.hasErrors('date')}">Date must be in yyyy-mm-dd format and must be in the future</p>
       </div>
       <div class="form-group" th:classappend="${#fields.hasErrors('time')}? has-error">
         <label for="time">Event time :</label>
         <input class="form-control" type="text" name="time" id="time" th:field="*{time}" th:value="${time}"/>
-        <p class="text-danger" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">errors</p>
+        <p class="text-danger" th:if="${#fields.hasErrors('time')}">Time must be in HH:mm format</p>
       </div>
       <div class="form-group" th:classappend="${#fields.hasErrors('description')}? has-error">
-      <label for"details" id="label">  Description :</label>
+      <label id="label">  Description :</label>
 		<textarea name="description" id="description" th:field="*{description}" th:value="${description}">
         </textarea>
         <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">errors</p>
