@@ -48,17 +48,17 @@ input {
 
   label {
     float: left;
-    width: calc(100% - 200px);
+    width: 100px;
   }
 
   input {
     float: left;
     width: calc(100% - 200px);
   }
-
+  
   textarea{
     float: left;
-    width: calc(100% - 200px);
+    width: calc(100% - 100px);
     height: 200px;
   }
    #buttons {
@@ -71,11 +71,15 @@ input {
   a{
   width: calc(100% - 200px);
   }
-    #addVenue{
-  float: right;
+  #addVenue{
+  margin-left: 1.5rem;
   width: calc(100% - 450px);
   padding: 0.7em;
     margin-bottom: 0.5rem;
+  }
+  #venueLabel{
+    float: left;
+    width: 200px;
   }
   </style>
 </head>
@@ -90,7 +94,7 @@ input {
         <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">errors</p>
       </div>
        <div>
-       <label for="venue">Select a venue :</label>
+       <label for="venue" id="venueLabel">Select a venue :</label>
        <select id="venue" name="venue">
         		<option selected="selected"
                 	th:value="${event.venue.id}"
