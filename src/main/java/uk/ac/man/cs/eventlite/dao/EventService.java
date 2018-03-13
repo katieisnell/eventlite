@@ -8,5 +8,14 @@ public interface EventService {
 
 	public Iterable<Event> findAll();
 	
+	public Iterable<Event> findFutureEvents();
+	
+	public Iterable<Event> findPastEvents();
+	
 	public void save(Event event);
+	
+	public Event findOne(long event);
+
+	public Iterable<Event> listEventsByName(String name);
+
 }

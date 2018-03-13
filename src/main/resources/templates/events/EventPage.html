@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All events</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>All events</h1>
+    
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fa fa-bolt"></i> Event</th>
+          <th><i class="fa fa-map-marker"></i> Venue</th>
+          <th><i class="fa fa-calendar"></i> Date</th>
+          <th><i class="fa fa-clock-o"></i> Time</th>
+          <th><i class="fa fa-info-circle"></i> Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${event}" >
+          <td th:text="${e.name}">My Event</td>
+          <td th:text="${e.venue.name}">Event venue</td>
+          <td th:text="${{e.date}}">Event date</td>
+           <td th:text="${{e.time}}">Event time</td>
+          <td th:text="${{e.details}}">Event details</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</body>
+</html>

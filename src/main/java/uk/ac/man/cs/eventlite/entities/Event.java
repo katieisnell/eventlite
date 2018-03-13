@@ -17,6 +17,8 @@ public class Event {
 	@Id
 	@GeneratedValue
 	private long id;
+	
+	private String details;
 
 	@Temporal(TemporalType.DATE)
 	private Date date;
@@ -28,6 +30,7 @@ public class Event {
 
 	@ManyToOne
 	private Venue venue;
+	
 
 	public Event() {
 	}
@@ -70,5 +73,14 @@ public class Event {
 
 	public void setVenue(Venue venue) {
 		this.venue = venue;
+	}
+	
+	public String getDetails()
+	{
+		return details;
+	}
+	
+	public void setDetails(String details) {
+		this.details = details;
 	}
 }
