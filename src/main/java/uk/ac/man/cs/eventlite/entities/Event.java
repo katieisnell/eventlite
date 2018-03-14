@@ -22,7 +22,11 @@ public class Event {
 	@GeneratedValue
 	private long id;
 	
-	@NotNull(message = "There must be a date")
+
+	private String details;
+
+
+    @NotNull(message = "There must be a date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	@Future
@@ -40,8 +44,10 @@ public class Event {
 	@ManyToOne
 	private Venue venue;
 	
+
 	@Size(max = 500, message = "The description should have a maximum of 500 characters")
 	private String description;
+
 
 	public Event() {
 	}
@@ -86,11 +92,21 @@ public class Event {
 		this.venue = venue;
 	}
 	
+
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getDetails()
+	{
+		return details;
+	}
+	
+	public void setDetails(String details) {
+		this.details = details;
 	}
 }

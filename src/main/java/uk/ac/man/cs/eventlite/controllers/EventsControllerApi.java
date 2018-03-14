@@ -40,6 +40,7 @@ public class EventsControllerApi {
 		return eventToResource(eventService.findAll());
 	}
 	
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteEvent(@PathVariable("id") long id) {
       eventService.delete(id);
@@ -59,6 +60,13 @@ public class EventsControllerApi {
         return ResponseEntity.created(location).build();
     }
     
+    
+    @RequestMapping(value = "/events/search", method = RequestMethod.GET)
+	public Resources<Resource<Event>> getSearchEvents(String name) {
+
+		return eventToResource(eventService.listEventsByName(name));
+	}
+	
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public ResponseEntity<?> newEvent() {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
