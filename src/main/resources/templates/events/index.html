@@ -28,6 +28,7 @@
           <th><i class="fa fa-map-marker"></i> Venue</th>
           <th><i class="fa fa-calendar"></i> Date</th>
           <th><i class="fa fa-clock-o"></i> Time</th>
+          <th><i class="fa fa-edit"></i> Update</th>
         </tr>
       </thead>
       <tbody>
@@ -37,6 +38,9 @@
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
+          <td>
+          <a class="btn btn-primary" role="button" th:href="@{'/events/'+ ${e.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -58,9 +62,6 @@
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
-          <td>
-          <a class="btn btn-primary" role="button" th:href="@{'/events/'+ ${e.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update event</a>
-          </td>
           <td>
             <form th:action="@{/events/{num}(num=${e.id})}" th:method="delete">
             <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

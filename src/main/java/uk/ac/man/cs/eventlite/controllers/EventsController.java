@@ -32,9 +32,6 @@ public class EventsController {
 	@Autowired
 	private VenueService venueService;
 
-	@Autowired
-	private VenueService venueService;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
 

@@ -60,14 +60,14 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		event2.setVenue(kilburn);
 		event2.setDate(new Date(117, 10, 12, 11, 10));
 		event2.setTime(new Date(105, 04, 1, 10, 10));
-		event2.setDetails("not so good event");
+		event2.setDescription("not so good event");
 
 		Event event3 = new Event();
 		event3.setName("COMP23412 Showcase, group F");
 		event3.setVenue(kilburn);
 		event3.setDate(new Date(110, 03, 14, 5, 10));
 		event3.setTime(new Date(110, 03, 14, 5, 10));
-		event3.setDetails("amazing event");
+		event3.setDescription("amazing event");
 		
 		Event event4 = new Event();
 		event4.setName("Adam");

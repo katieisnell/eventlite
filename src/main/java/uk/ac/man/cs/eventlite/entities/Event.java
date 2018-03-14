@@ -21,10 +21,6 @@ public class Event {
 	@Id
 	@GeneratedValue
 	private long id;
-	
-
-	private String details;
-
 
     @NotNull(message = "There must be a date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -99,14 +95,5 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getDetails()
-	{
-		return details;
-	}
-	
-	public void setDetails(String details) {
-		this.details = details;
 	}
 }
