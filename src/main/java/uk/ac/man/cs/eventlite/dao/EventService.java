@@ -13,6 +13,10 @@ public interface EventService {
 	public Iterable<Event> findPastEvents();
 	
 	public void save(Event event);
+
+    public void delete(long id);
+    
+    public Event findById(long id);
 	
 	public Event findOne(long event);
 

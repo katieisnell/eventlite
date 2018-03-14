@@ -39,6 +39,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		kilburn.setName("Kilburn Building");
 		kilburn.setCapacity(200);
 		venueService.save(kilburn);
+		
+		Venue uniPlace = new Venue();
+		uniPlace.setName("University Place");
+		uniPlace.setCapacity(300);
+		venueService.save(uniPlace);
 
 		//Set dates to year + 1900, month, day, hour, minute
 		Event event1 = new Event();
@@ -47,6 +52,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		event1.setDate(new Date(117, 10, 12, 11, 10));
 		event1.setTime(new Date(117, 10, 12, 11, 10));
 		//event1.setDetails("best event");
+
 
 
 		Event event2 = new Event();
