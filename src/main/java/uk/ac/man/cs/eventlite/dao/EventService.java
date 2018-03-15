@@ -17,5 +17,9 @@ public interface EventService {
 	public Event findOne(long event);
 
 	public Iterable<Event> listEventsByName(String name);
+	
+	public Iterable<Event> listEventsByNameUpcoming(String name);
+	
+	public Iterable<Event> listEventsByNamePrevious(String name);
 
 }
