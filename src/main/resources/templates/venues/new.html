@@ -21,7 +21,7 @@
       </div>
       
       <div class="form-group" th:classappend="${#fields.hasErrors('roadName')}? has-error">
-        <label for="roadName">Road name :</label>
+        <label for="roadName">*Road name :</label>
         <input class="form-control" type="text" name="roadName" id="roadName" th:field="*{roadName}" />
         <p class="text-danger" th:if="${#fields.hasErrors('roadName')}" th:errors="*{roadName}">errors</p>
       </div>
