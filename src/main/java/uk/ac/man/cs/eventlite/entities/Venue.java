@@ -23,6 +23,8 @@ public class Venue {
   
 	private int capacity;
 	
+	private String address;
+	
 	@OneToMany
 	private List<Event> events;
 	
@@ -41,6 +43,10 @@ public class Venue {
 		this.id = id;
 	}
 
+	public void setAddress(String addr) {
+	  this.address = addr;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -52,6 +58,9 @@ public class Venue {
 	public int getCapacity() {
 		return capacity;
 	}
+	public String getAddress() {
+    return address;
+  }
 
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;

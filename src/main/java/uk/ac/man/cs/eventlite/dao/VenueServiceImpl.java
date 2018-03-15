@@ -45,4 +45,10 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findAll();
 	}
 
+  @Override
+  public void delete(long id) {
+    venueRepository.delete(id);
+    
+  }
+
 }
