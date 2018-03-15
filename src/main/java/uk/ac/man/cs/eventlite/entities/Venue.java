@@ -39,6 +39,7 @@ public class Venue {
 	private String postcode;
 	
 	@Column (name = "roadName")
+	@NotEmpty(message = "Road name can not be empty")
 	@Size(max = 300, message = "The road name should have a maximum of 300 characters")
 	private String roadName;
 	
