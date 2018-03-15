@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 
 @Controller
-@RequestMapping(value = "/venue", produces = MediaType.TEXT_HTML_VALUE)
+@RequestMapping(value = "/venues", produces = MediaType.TEXT_HTML_VALUE)
 public class VenuesController {
 
   @Autowired
