@@ -46,6 +46,14 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 public class VenueControllerTest {
 	
 	private MockMvc mvc;
+	
+	private String TOOLONG = "111111111111111111111111111111111111111111111111111111111111111111111111111111" + 
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111" +
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111" +
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111" +
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111" +
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111" +
+			"11111111111111111111111111111111111111111111111111111111111111111111111111111";
 
 	@Autowired
 	private Filter springSecurityFilterChain;
@@ -154,7 +162,7 @@ public class VenueControllerTest {
 	public void postLongerNameVenue() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/venues").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("name", "============================================================================================================================================================================================================================================================================================================")
+				.param("name", TOOLONG)
 				.param("postcode", "M1 4SX")
 				.param("capacity", "12")
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
@@ -169,7 +177,7 @@ public class VenueControllerTest {
 	public void postLongerRoadNameVenue() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/venues").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("roadName", "==============================================================================================================================================================================================================================================================================================================")
+				.param("roadName", TOOLONG)
 				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
 		.andExpect(view().name("venues/new"))
 		.andExpect(model().attributeHasFieldErrors("venue", "roadName"))
@@ -196,6 +204,133 @@ public class VenueControllerTest {
 		assertThat("university place", equalTo(arg.getValue().getName()));
 	}
 	
+	@Test
+	public void getVenueToUp() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/venues/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.accept(MediaType.TEXT_HTML))
+		.andExpect(status().isOk()).andExpect(view().name("venues/update"))
+		.andExpect(handler().methodName("updateR"));
+	}
 	
+	@Test
+	public void updateEmptyNameVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "")
+				.param("postcode", "M1 4SX")
+				.param("capacity", "100")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "name"))
+		.andExpect(handler().methodName("updateSave"));
 
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateEmptyPostcodeVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "university place")
+				.param("postcode", "")
+				.param("capacity", "10")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "postcode"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateEmptyCapacityVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "university place")
+				.param("postcode", "M1 4SX")
+				.param("capacity", "")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "capacity"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateEmptyRoadNameVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "university place")
+				.param("postcode", "M1 4SX")
+				.param("capacity", "5")
+				.param("roadName", "")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "roadName"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateNegativeCapacityVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "university place")
+				.param("postcode", "M1 4SX")
+				.param("capacity", "-5")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "capacity"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateLongNameVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", TOOLONG)
+				.param("postcode", "M1 4SX")
+				.param("capacity", "12")
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "name"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateLongRdNameVenue() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("roadName", TOOLONG)
+				.accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("venues/update"))
+		.andExpect(model().attributeHasFieldErrors("venue", "roadName"))
+		.andExpect(handler().methodName("updateSave"));
+
+		verify(venueService, never()).save(venue);
+	}
+	
+	@Test
+	public void updateVenue() throws Exception{
+		ArgumentCaptor<Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		mvc.perform(MockMvcRequestBuilders.post("/venues/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name","university place")
+				.param("capacity","50")
+				.param("roadName","oxford road")
+				.param("postcode","M1 4SX")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isFound()).andExpect(content().string(""))
+		.andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors())
+		.andExpect(handler().methodName("updateSave")).andExpect(flash().attributeExists("ok_message"));
+
+		verify(venueService).save(arg.capture());
+		assertThat("university place", equalTo(arg.getValue().getName()));
+	}
 }
