@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
 
@@ -27,10 +28,14 @@ public class VenuesController {
   }
 
 
-  
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String deletevenue(@PathVariable("id") long id) {
-    venueService.delete(id);
+    public String deletevenue(@PathVariable("id") long id, RedirectAttributes redirectAttrs) {
+    try {
+      venueService.delete(id);
+    }catch(Exception e) {
+      redirectAttrs.addFlashAttribute("error_message", "venue cannot be deleted.");
       return "redirect:/venues";
+    }
+    return "redirect:/venues";
   }
 }
