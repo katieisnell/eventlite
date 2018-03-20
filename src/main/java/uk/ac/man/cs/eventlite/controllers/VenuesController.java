@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
-import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Controller
@@ -63,5 +62,31 @@ public class VenuesController {
 
 		return "redirect:/venues";
 	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	  public String updateR(@PathVariable("id") long id, Model model)
+	  {
+	    model.addAttribute("venue", venueService.findById(id));
+	      return "venues/update";
+	  }
+
+	  @RequestMapping(value= "update/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	  public String updateSave(@PathVariable("id") long id,
+	      @RequestBody @Valid @ModelAttribute Venue venue,
+	            BindingResult errors,
+	            Model model,
+	            RedirectAttributes redirectAttrs)
+	  {
+	    if (errors.hasErrors())
+	    {
+	      model.addAttribute("venues", venueService.findAll());
+	            return "venues/update";
+	        }
+
+	        venueService.save(venue);
+
+	        redirectAttrs.addFlashAttribute("ok_message", "Event succesfully updated");
+	        return "redirect:/venues";
+	  }
   
 }

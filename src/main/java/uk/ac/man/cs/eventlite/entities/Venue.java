@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -36,6 +37,8 @@ public class Venue {
 	
 	@Column (name = "postcode")
 	@NotEmpty(message = "Postcode can not be empty")
+	@Pattern(regexp="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$",
+	message="The postCode must be valid")
 	private String postcode;
 	
 	@Column (name = "roadName")
@@ -93,7 +96,7 @@ public class Venue {
 	}
 	
 	public String getRoadName() {
-    return postcode;
+    return roadName;
   }
 
 	public void setRoadName(String roadName) {
