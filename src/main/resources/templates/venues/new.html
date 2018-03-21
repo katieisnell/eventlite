@@ -3,12 +3,71 @@
   layout:decorate="~{layouts/default}">
 <head>
   <title>New</title>
+  <style>
+  * {
+  box-sizing: border-box;
+}
+  #form1 {
+  padding: 1em;
+  background: #f9f9f9;
+  border: 1px solid #c1c1c1;
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+}
+form input {
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #9c9c9c;
+}
+
+  h1{
+  text-align: center;
+}
+input {
+  width: 100%;
+  padding: 0.7em;
+  margin-bottom: 0.5rem;
+}
+  @media (min-width: 400px) {
+  form {
+    overflow: hidden;
+  }
+
+  label {
+    float: left;
+    width: 100px;
+  }
+
+  input {
+    float: left;
+    width: calc(100% - 200px);
+  }
+  
+  textarea{
+    float: left;
+    width: calc(100% - 100px);
+    height: 200px;
+  }
+   #buttons {
+    float: right;
+    width: calc(100% - 190px);
+  }
+  #save{
+  width: calc(100% - 200px);
+  }
+  #a{
+  width: calc(100% - 200px);
+  }
+  </style>
 </head>
 <body>
   <div layout:fragment="content">
     <h1>Add a new venue</h1>
     
-    <form action="#" th:action="@{/venues}" th:object="${venue}" method="post">
+    <form id="form1" action="#" th:action="@{/venues}" th:object="${venue}" method="post">
       <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
         <label for="name">*Venue name</label>
         <input class="form-control" type="text" name="name" id="name" autofocus="autofocus" />
@@ -31,8 +90,11 @@
         <p class="text-danger" th:if="${#fields.hasErrors('postcode')}" th:errors="*{postcode}">errors</p>
       </div>
     
-      <button class="btn btn-primary" type="submit"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
-      <a class="btn btn-warning" role="button" href="/venues"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
+      <div id="buttons">
+      <button id="save" class="btn btn-primary" type="submit"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
+      <a id="a" class="btn btn-warning" role="button" href="/venues"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
+      </div>
+      
     </form>
   </div>
 </body>
