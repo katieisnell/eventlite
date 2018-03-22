@@ -46,6 +46,17 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findAll();
 	}
 
+  @Override
+  public void delete(long id) {
+    venueRepository.delete(id);
+    
+  }
+  
+  @Override
+	public Venue findOne(long venue) {
+		return venueRepository.findOne(venue);
+	}
+	
 	@Override
 	public void delete(long id) {
 		venueRepository.delete(id);

@@ -38,6 +38,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Venue kilburn = new Venue();
 		kilburn.setName("Kilburn Building");
 		kilburn.setCapacity(200);
+		kilburn.setAddress("23 Manchester Road E14 3BD");
 		venueService.save(kilburn);
 		
 		Venue uniPlace = new Venue();
