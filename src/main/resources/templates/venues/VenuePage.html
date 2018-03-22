@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Venue Details</title>
+   <style>
+  * {
+  box-sizing: border-box;
+}
+  #form1 {
+  padding: 1em;
+  background: #f9f9f9;
+  border: 1px solid #c1c1c1;
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+ }
+
+  h1{
+  text-align: center;
+ }
+  @media (min-width: 400px) {
+  div {
+    overflow: hidden;
+  }
+  p{
+    float: left;
+    font-size:25px;
+    width: calc(100% - 200px);
+    width: 100%;
+    }
+
+  label {
+    font-size:35px;
+    float: left;
+    width: calc(100% - 200px);
+  }
+    a{
+  width: calc(100% - 200px);
+  }
+    #delete{
+  width: calc(100% - 200px);
+  }
+  </style>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Event Details</h1>
+
+      <div id = "form1" th:object="${venue}">
+      <div>
+      <label for="name">Venue :</label>
+      <p th:text="${venue.name}"> </p>
+  
+      <label for="address">Event address :</label>
+      <p th:text="${venue.address}"> </p>
+      
+      <label for="capacity">Venue capacity :</label>
+      <p th:text="${venue.capacity}"> </p>
+      
+      <label for="">Events coming up:</label>
+      <p th:text="${}"> </p>
+      
+      </div>
+            <form th:action="@{/venues/{num}(num=${venue.name})}" th:method="delete">
+            <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
+            </form>
+            <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
+      </div>
+
+  </div>
+
+</body>
+</html>
+   
