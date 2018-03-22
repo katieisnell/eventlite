@@ -39,10 +39,17 @@ public class VenuesController {
       return "redirect:/venues";
   }
   
+
 	@RequestMapping(value="/venue", method = RequestMethod.GET)
 	public String venuePage(Model model, @RequestParam("vname") long vname) {
 		model.addAttribute("venue", venueService.findOne(vname));
 		model.addAttribute("events", eventService.findAll());
 		return "venues/VenuePage";
+	}
+	
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  public String searchVenueByName(@RequestParam(value = "search", required = false) String name, Model model) {
+      model.addAttribute("search", venueService.listVenuesByName(name));
+      return "venues/search";
 	}
 }

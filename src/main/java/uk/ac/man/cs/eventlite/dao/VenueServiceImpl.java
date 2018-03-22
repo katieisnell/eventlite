@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+
 /*import java.io.InputStream;
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,7 +38,7 @@ public class VenueServiceImpl implements VenueService {
 	
 	@Override
 	public Venue findById(long id){
-		return venueRepository.findById(id).get();
+		return venueRepository.findById(id);
 	}
 	
 	@Override
@@ -54,6 +55,16 @@ public class VenueServiceImpl implements VenueService {
   @Override
 	public Venue findOne(long venue) {
 		return venueRepository.findOne(venue);
+	}
+	
+	@Override
+	public void delete(long id) {
+		venueRepository.delete(id);
+	}
+	
+	@Override
+	public Iterable<Venue> listVenuesByName(String name) {
+		return venueRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 	}
 
 }
