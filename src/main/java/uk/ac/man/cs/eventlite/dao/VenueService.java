@@ -11,6 +11,8 @@ public interface VenueService {
 	public Venue save(Venue venue);
 	
 	public Venue findById(long id);
+	
+	public Venue findOne(long venue);
 
   public void delete(long id);
 }

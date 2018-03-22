@@ -50,5 +50,10 @@ public class VenueServiceImpl implements VenueService {
     venueRepository.delete(id);
     
   }
+  
+  @Override
+	public Venue findOne(long venue) {
+		return venueRepository.findOne(venue);
+	}
 
 }
