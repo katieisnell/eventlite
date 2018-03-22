@@ -57,10 +57,6 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findOne(venue);
 	}
 	
-	@Override
-	public void delete(long id) {
-		venueRepository.delete(id);
-	}
 	
 	@Override
 	public Iterable<Venue> listVenuesByName(String name) {

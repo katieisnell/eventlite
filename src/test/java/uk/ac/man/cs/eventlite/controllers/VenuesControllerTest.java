@@ -101,4 +101,15 @@ public class VenuesControllerTest {
 		verify(venueService).listVenuesByName(testString);
 		verifyZeroInteractions(venue);
 	}
+	
+	@Test
+	public void getDetailedList() throws Exception {
+		when(venue.getId()).thenReturn(1L);
+		when(venueService.findOne(venue.getId())).thenReturn(venue);
+
+		mvc.perform(get("/venues/venue").param("vname", venue.getId() + "").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+				.andExpect(view().name("venues/VenuePage")).andExpect(handler().methodName("venuePage"));
+
+		verify(venueService).findOne(venue.getId());
+	}
 }
