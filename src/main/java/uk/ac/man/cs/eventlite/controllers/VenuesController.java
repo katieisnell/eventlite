@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
 
@@ -33,4 +34,10 @@ public class VenuesController {
     venueService.delete(id);
       return "redirect:/venues";
   }
+  
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  public String searchVenueByName(@RequestParam(value = "search", required = false) String name, Model model) {
+      model.addAttribute("search", venueService.listVenuesByName(name));
+      return "venues/search";
+	}
 }

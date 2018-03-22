@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+
 /*import java.io.InputStream;
 import java.util.Collections;
 import java.util.Iterator;
@@ -45,10 +46,14 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findAll();
 	}
 
-  @Override
-  public void delete(long id) {
-    venueRepository.delete(id);
-    
-  }
+	@Override
+	public void delete(long id) {
+		venueRepository.delete(id);
+	}
+	
+	@Override
+	public Iterable<Venue> listVenuesByName(String name) {
+		return venueRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
+	}
 
 }
