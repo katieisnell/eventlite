@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 
 @Controller
@@ -18,6 +19,9 @@ public class VenuesController {
 
   @Autowired
   private VenueService venueService;
+  
+  @Autowired
+  private EventService eventService;
 
   @RequestMapping(method = RequestMethod.GET)
   public String getAllVenus(Model model) {
@@ -38,6 +42,7 @@ public class VenuesController {
 	@RequestMapping(value="/venue", method = RequestMethod.GET)
 	public String venuePage(Model model, @RequestParam("vname") long vname) {
 		model.addAttribute("venue", venueService.findOne(vname));
+		model.addAttribute("events", eventService.findAll());
 		return "venues/VenuePage";
 	}
 }
