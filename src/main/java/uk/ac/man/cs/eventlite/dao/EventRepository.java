@@ -15,6 +15,8 @@ public interface EventRepository extends CrudRepository<Event, Long>{
 
 	Iterable<Event> findByOrderByDateAscTimeAsc();
 	
+	Iterable<Event> findTop3ByDateAfterOrderByDateAscNameAsc(Date date);
+	
 
 	Event findById(long id);
 

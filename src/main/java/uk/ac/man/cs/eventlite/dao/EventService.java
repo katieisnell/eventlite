@@ -12,6 +12,8 @@ public interface EventService {
 	
 	public Iterable<Event> findPastEvents();
 	
+	public Iterable<Event> findNext3Events();
+	
 	public void save(Event event);
 
     public void delete(long id);

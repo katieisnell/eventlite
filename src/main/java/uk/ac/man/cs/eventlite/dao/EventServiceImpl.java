@@ -71,5 +71,10 @@ public class EventServiceImpl implements EventService {
 	public Event findOne(long event) {
 		return eventRepository.findOne(event);
 	}
+	
+	@Override
+	public Iterable<Event> findNext3Events() {
+		return eventRepository.findTop3ByDateAfterOrderByDateAscNameAsc(new Date());
+	}
 
 }
