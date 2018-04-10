@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
@@ -24,6 +26,9 @@ public class VenuesController {
 
   @Autowired
   private VenueService venueService;
+  
+  @Autowired
+  private EventService eventService;
 
   @RequestMapping(method = RequestMethod.GET)
   public String getAllVenues(Model model) {
@@ -94,4 +99,17 @@ public class VenuesController {
 	        return "redirect:/venues";
 	  }
   
+
+	@RequestMapping(value="/venue", method = RequestMethod.GET)
+	public String venuePage(Model model, @RequestParam("vname") long vname) {
+		model.addAttribute("venue", venueService.findOne(vname));
+		model.addAttribute("events", venueService.findOne(vname).getEvents());
+		return "venues/VenuePage";
+	}
+	
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  public String searchVenueByName(@RequestParam(value = "search", required = false) String name, Model model) {
+      model.addAttribute("search", venueService.listVenuesByName(name));
+      return "venues/search";
+	}
 }

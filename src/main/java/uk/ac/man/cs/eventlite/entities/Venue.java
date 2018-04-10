@@ -47,7 +47,8 @@ public class Venue {
 	@Size(max = 300, message = "The road name should have a maximum of 300 characters")
 	private String roadName;
 	
-	@OneToMany
+
+	@OneToMany(mappedBy = "venue")
 	private List<Event> events;
 	
 	public List<Event> getEvents() {
