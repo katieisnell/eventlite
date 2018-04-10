@@ -7,6 +7,14 @@
 <body>
   <div layout:fragment="content">
     <h1>All venues</h1>
+    
+    <div class="container">
+    <h2>Search for Venues</h2>
+    <form action="#" th:object="${venue}" th:action="@{/venues/search}" th:method="get">
+        <input type="text" name="search" id="search"/>
+        <a th:href="@{/venues/search}"><input type="submit" value="Search!" class="btn btn-success"/></a>
+    </form>
+	</div>
 
     <table class="table table-striped table-hover">
       <thead>
@@ -18,7 +26,7 @@
       </thead>
       <tbody>
         <tr th:each="v : ${venues}">
-          <td th:text="${v.name}"> Venue name</td>
+         <td> <a th:href="@{../venues/venue(vname=${v.id})}"> <p th:text="${v.name}"> Venue name</p> </a> </td>
           <td th:text="${v.address}">Venue address</td>
           <td th:text="${v.capacity}">Venue capacity</td>
           <td>
