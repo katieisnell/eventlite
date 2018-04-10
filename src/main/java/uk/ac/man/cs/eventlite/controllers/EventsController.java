@@ -113,20 +113,7 @@ public class EventsController {
         model.addAttribute("searchNew", eventService.listEventsByNameUpcoming(name));
         model.addAttribute("searchOld", eventService.listEventsByNamePrevious(name));
         return "events/search";
-    }
-	/*
-	@RequestMapping(value = "/searchNew", method = RequestMethod.GET)
-    public String searchEventByNameUpcoming(@RequestParam(value = "search", required = false) String name, Model model) {
-        model.addAttribute("searchNew", eventService.listEventsByNameUpcoming(name));
-        return "events/search";
-    }
-	
-	@RequestMapping(value = "/searchOld", method = RequestMethod.GET)
-    public String searchEventByNamePrevious(@RequestParam(value = "search", required = false) String name, Model model) {
-        model.addAttribute("searchNew", eventService.listEventsByNamePrevious(name));
-        return "events/search";
-    }*/
-
+	}
 	
 
 	@RequestMapping(value="/event", method = RequestMethod.GET)
