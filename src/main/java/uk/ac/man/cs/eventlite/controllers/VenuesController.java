@@ -26,7 +26,7 @@ public class VenuesController {
   private VenueService venueService;
 
   @RequestMapping(method = RequestMethod.GET)
-  public String getAllVenus(Model model) {
+  public String getAllVenues(Model model) {
 
     model.addAttribute("venues", venueService.findAll());
 
@@ -34,9 +34,14 @@ public class VenuesController {
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String deletevenue(@PathVariable("id") long id) {
-    venueService.delete(id);
+    public String deletevenue(@PathVariable("id") long id, RedirectAttributes redirectAttrs) {
+    try {
+      venueService.delete(id);
+    }catch(Exception e) {
+      redirectAttrs.addFlashAttribute("error_message", "venue cannot be deleted.");
       return "redirect:/venues";
+    }
+    return "redirect:/venues";
   }
   
 	@RequestMapping(value = "/new", method = RequestMethod.GET)

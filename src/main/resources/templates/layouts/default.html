@@ -33,6 +33,15 @@
 		<span th:text="${ok_message}">Success!</span>
     </div>
     
+    <div class="container">
+    	<div class="alert alert-danger alert-dismissible" role="alert" th:if="${error_message}">
+      		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        		<i class="fa fa-times" aria-hidden="true"></i>
+      		</button>
+		<span th:text="${error_message}">Error!</span>
+    </div>
+    
+    
 
     <div layout:fragment="content">
       Main page body goes here...

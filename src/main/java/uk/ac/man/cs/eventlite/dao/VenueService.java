@@ -12,5 +12,5 @@ public interface VenueService {
 	
 	public Venue findById(long id);
 
-  public void delete(long id);
+  public boolean delete(long id);
 }
