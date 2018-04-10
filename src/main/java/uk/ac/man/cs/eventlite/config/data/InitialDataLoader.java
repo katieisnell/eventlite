@@ -34,7 +34,12 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			log.info("Database already populated. Skipping data initialization.");
 			return;
 		}
-		
+		Venue VenueZ = new Venue();
+		VenueZ.setName("Venue Z");
+		VenueZ.setCapacity(50);
+		VenueZ.setRoadName("53 Manchester Road");
+		VenueZ.setPostcode("E15 3BD");
+    venueService.save(VenueZ);
 
 		Venue VenueA = new Venue();
 		VenueA.setName("Venue A");
@@ -65,7 +70,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		event1.setVenue(VenueA);
 		event1.setDate(new Date(117, 10, 12, 11, 10));
 		event1.setTime(new Date(117, 10, 12, 11, 10));
-		//event1.setDetails("best event");
+		event1.setDescription("best event");
 
 
 

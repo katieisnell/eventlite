@@ -43,7 +43,7 @@
     float: left;
     width: calc(100% - 200px);
   }
-    a{
+    #a{
   width: calc(100% - 200px);
   }
     #delete{
@@ -61,7 +61,7 @@
       <p th:text="${venue.name}"> </p>
   
       <label for="address">Event address :</label>
-      <p th:text="${venue.address}"> </p>
+      <p th:text="${venue.roadName} + ',' + ${venue.postcode}"> </p>
       
       <label for="capacity">Venue capacity :</label>
       <p th:text="${venue.capacity}"> </p>
@@ -75,10 +75,10 @@
       
       
       </div>
-            <form th:action="@{/venues/{num}(num=${venue.name})}" th:method="delete">
+            <form th:action="@{/venues/{num}(num=${venue.id})}" th:method="delete">
             <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
             </form>
-            <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
+            <a id="a" class="btn btn-warning" role="button" href="/venues"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
       </div>
 
   </div>

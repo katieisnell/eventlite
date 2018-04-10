@@ -32,11 +32,6 @@
           <td>
           <a class="btn btn-primary" role="button" th:href="@{'/venues/'+ ${v.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
           </td>
-          <td>
-          <form th:action="@{/venues/{num}(num=${v.id})}" th:method="delete">
-      <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
-    </form>
-        </td>
         </tr>
       </tbody>
     </table>

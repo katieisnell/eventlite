@@ -36,6 +36,8 @@ public class DeleteVenuesWithEventsTest {
       Venue warehouse = new Venue();
       warehouse.setName("Warehouse One");
       warehouse.setCapacity(200);
+      warehouse.setRoadName("23 Manchester Road");
+      warehouse.setPostcode("E14 3BD");
       warehouse.setId(1);
       venueService.save(warehouse);
       Event event = new Event();
