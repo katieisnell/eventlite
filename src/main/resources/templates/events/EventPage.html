@@ -38,7 +38,7 @@
     float: left;
     width: calc(100% - 200px);
   }
-    a{
+    #a{
   width: calc(100% - 200px);
   }
     #delete{
@@ -70,7 +70,7 @@
             <form th:action="@{/events/{num}(num=${event.id})}" th:method="delete">
             <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
             </form>
-            <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
+            <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
       </div>
 
   </div>
