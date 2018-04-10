@@ -32,6 +32,11 @@
     width: calc(100% - 200px);
     width: 100%;
     }
+    li{
+    float: left;
+    width: calc(100% - 200px);
+    width: 100%;
+    }
 
   label {
     font-size:35px;
@@ -62,7 +67,12 @@
       <p th:text="${venue.capacity}"> </p>
       
       <label for="allEvents">Events coming up:</label>
-      <p th:each="event : ${events}" th:text="${event.name}"> </p>
+      <ul th:each="e : ${events}" >
+      <li>
+          <a th:href="@{../events/event(ename=${e.id})}">  <p th:text="${e.name}"> </p> </a>  
+           </li>
+      </ul>
+      
       
       </div>
             <form th:action="@{/venues/{num}(num=${venue.name})}" th:method="delete">

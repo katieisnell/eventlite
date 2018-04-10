@@ -54,12 +54,16 @@
       <div>
       <label for="name">Event :</label>
       <p th:text="${event.name}"> </p>
+      
       <label for="venue" id="venueLabel">Venue :</label>
-      <p th:text="${event.venue.name}"> </p>
+      <a th:href="@{../venues/venue(vname=${event.venue.id})}"> <p th:text="${event.venue.name}"> </p> </a>
+      
       <label for="date">Event date :</label>
       <p th:text="${event.date}"> </p>
+      
       <label for="time">Event time :</label>
       <p th:text="${event.time}"> </p>
+      
       <label id="label">Description :</label>
       <p th:text="${event.description}"> </p>
       </div>

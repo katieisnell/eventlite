@@ -35,7 +35,7 @@
           
         <tr th:each="e : ${futureEvents}">
           <td> <a th:href="@{../events/event(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
-          <td th:text="${e.venue.name}">Event venue</td>
+          <td> <a th:href="@{../venues/venue(vname=${e.venue.id})}"> <p th:text="${e.venue.name}"> Event venue </a> </td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
           <td>
@@ -59,7 +59,7 @@
       <tbody>
         <tr th:each="e : ${pastEvents}">
           <td> <a th:href="@{../events/event(ename=${e.id})}"> <p th:text="${e.name}"> Event name</p> </a> </td>
-          <td th:text="${e.venue.name}">Event venue</td>
+           <td> <a th:href="@{../venues/venue(vname=${e.venue.id})}"> <p th:text="${e.venue.name}"> Event venue </a> </td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
         </tr>
