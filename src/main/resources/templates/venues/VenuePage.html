@@ -61,9 +61,8 @@
       <label for="capacity">Venue capacity :</label>
       <p th:text="${venue.capacity}"> </p>
       
-      <label for="">Events coming up:</label>
-      <p th:each="event : ${events}" th:if="${venue.id == event.venue.id}"
-                	th:text="${event.name}"> </p>
+      <label for="allEvents">Events coming up:</label>
+      <p th:each="event : ${events}" th:text="${event.name}"> </p>
       
       </div>
             <form th:action="@{/venues/{num}(num=${venue.name})}" th:method="delete">

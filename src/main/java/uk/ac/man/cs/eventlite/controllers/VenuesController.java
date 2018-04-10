@@ -43,7 +43,7 @@ public class VenuesController {
 	@RequestMapping(value="/venue", method = RequestMethod.GET)
 	public String venuePage(Model model, @RequestParam("vname") long vname) {
 		model.addAttribute("venue", venueService.findOne(vname));
-		model.addAttribute("events", eventService.findAll());
+		model.addAttribute("events", venueService.findOne(vname).getEvents());
 		return "venues/VenuePage";
 	}
 	
