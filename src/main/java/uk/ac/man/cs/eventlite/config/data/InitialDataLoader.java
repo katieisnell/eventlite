@@ -57,13 +57,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		VenueC.setPostcode("WA15 8QY");
 		venueService.save(VenueC);
 		
-
-		Venue kilburn = new Venue();
-		kilburn.setName("Kilburn Building");
-		kilburn.setCapacity(200);
-		kilburn.setAddress("23 Manchester Road E14 3BD");
-		venueService.save(kilburn);
-
 		
 
 		//Set dates to year + 1900, month, day, hour, minute

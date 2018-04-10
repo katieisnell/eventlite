@@ -1,14 +1,11 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -16,15 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.Filter;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,9 +35,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -71,8 +60,6 @@ public class VenuesControllerTest {
       "11111111111111111111111111111111111111111111111111111111111111111111111111111";
 	
   private final static String BAD_ROLE = "USER";
-
-	private MockMvc mvc;
 
 	@Autowired
 	private Filter springSecurityFilterChain;
@@ -107,7 +94,9 @@ public class VenuesControllerTest {
 				.andExpect(view().name("venues/index")).andExpect(handler().methodName("getAllVenues"));
 
 		verify(venueService).findAll();
-		
+	}
+	
+	@Test
 	public void getIndexWithSpecificEventNames() throws Exception {
 		String testString = "Venue A";
 		when(venueService.listVenuesByName(testString)).thenReturn(Collections.<Venue> singletonList(venue));
