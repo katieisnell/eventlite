@@ -197,12 +197,9 @@ public class EventsControllerTest {
 
 	@Test
   public void deleteEvent() throws Exception {
-	  MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-    parameters.add("name", "abc");
-    parameters.add("date", "2018-10-15");
     mvc.perform(MockMvcRequestBuilders.delete("/events/1").with(user("Rob").roles(Security.ADMIN_ROLE))
               .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-              .params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
+              .accept(MediaType.TEXT_HTML).with(csrf()))
               .andExpect(status().isFound()).andExpect(content().string(""))
               .andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors());
   }

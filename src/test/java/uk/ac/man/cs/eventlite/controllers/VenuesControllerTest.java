@@ -19,6 +19,7 @@ import java.util.Date;
 
 import javax.servlet.Filter;
 
+import org.hibernate.HibernateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +80,7 @@ public class VenuesControllerTest {
 				.build();
 	}
 	
-	//@Test
+	@Test
 	public void getIndexWithAllVenues() throws Exception {
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
 
@@ -90,7 +91,7 @@ public class VenuesControllerTest {
 		verifyZeroInteractions(venue);
 	}
 	
-	//@Test
+	@Test
 	public void getIndexWhenNoVenues() throws Exception {
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
 
@@ -101,37 +102,13 @@ public class VenuesControllerTest {
 		verifyZeroInteractions(venue);
 	}
 	
-	 //@Test
+	 @Test
 	  public void deleteVenue() throws Exception {
-	    MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-	    parameters.add("name", "abc");
-	    parameters.add("date", "2018-10-15");
 	    mvc.perform(MockMvcRequestBuilders.delete("/venues/1").with(user("Rob").roles(Security.ADMIN_ROLE))
 	              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-	              .params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
+	              .accept(MediaType.TEXT_HTML).with(csrf()))
 	              .andExpect(status().isFound()).andExpect(content().string(""))
 	              .andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors());
 	  }
-	 
-   @Test
-   public void deleteVenueWithEvents() throws Exception {
-     Venue venueA = new Venue();
-     venueA.setName("Venue A");
-     venueA.setId(100);
-     venueService.save(venueA);
-     Event eventAlpha = new Event();
-     eventAlpha.setName("Event Alpha");
-     eventAlpha.setVenue(venueA);
-     Date alphaDate = new Date(118, 07, 11, 12, 30);
-     eventAlpha.setDate(alphaDate); // (year + 1900, month, day, hour, minute)
-     eventAlpha.setTime(alphaDate);
-     eventService.save(eventAlpha);
-     
-     mvc.perform(MockMvcRequestBuilders.delete("/venues/100").with(user("Rob").roles(Security.ADMIN_ROLE))
-               .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-               .accept(MediaType.TEXT_HTML).with(csrf()))
-               .andExpect(status().isFound()).andExpect(content().string(""))
-               .andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors()).andExpect(flash().attributeExists("error_message"));
-   }
 	
 }

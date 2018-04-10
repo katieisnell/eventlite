@@ -46,8 +46,9 @@ public class VenueServiceImpl implements VenueService {
 	}
 
   @Override
-  public void delete(long id) {
+  public boolean delete(long id) {
     venueRepository.delete(id);
+    return true;
     
   }
 
