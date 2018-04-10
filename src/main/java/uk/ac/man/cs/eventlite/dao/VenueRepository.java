@@ -1,5 +1,4 @@
 package uk.ac.man.cs.eventlite.dao;
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/default}">
 <head>
-  <title>Update</title>
+  <title>Update Event</title>
   <style>
   * {
   box-sizing: border-box;
@@ -69,7 +69,7 @@ input {
   #save{
   width: calc(100% - 200px);
   }
-  a{
+  #a{
   width: calc(100% - 200px);
   }
 
@@ -122,7 +122,7 @@ input {
       </div>
       <div id="buttons">
       <button id="save" class="btn btn-primary" type="submit" ><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save</button>
-      <a class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
+      <a div="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</a>
       </div>
     </form>
   </div>
