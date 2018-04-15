@@ -25,7 +25,7 @@ public class Venue {
 	
 	private String address;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "venue")
 	private List<Event> events;
 	
 	public List<Event> getEvents() {
