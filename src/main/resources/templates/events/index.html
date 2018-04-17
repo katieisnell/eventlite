@@ -8,9 +8,12 @@
 <body>
   <div layout:fragment="content">
     <h1>All events</h1>
-    
-
-    
+    <style>
+  	#map {
+        height: 500px;
+        width: 500px;
+       }
+  </style>
     <div class="container">
     <h2>Search for Events</h2>
     <form action="#" th:object="${event}" th:action="@{/events/search}" th:method="get">
@@ -68,7 +71,48 @@
      <p>
       <a class="btn btn-primary" role="button" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
     </p>
-  </div>
+    
+    <div id="map">Map goes here</div>
+        <script th:inline="javascript">
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 53.483959, lng: -2.244644}
+        });
+        var geocoder = new google.maps.Geocoder();
 
+		var address = [];
+
+		/*[# th:each="e : ${futureEvents}"]*/
+
+		address.push("[(${e.venue.postcode})]");
+
+		/*[/]*/
+
+    	for (i = 0; i < address.length; i++)
+    	{
+    	    geocodeAddress(geocoder, map, address[i]);
+	    }
+      }
+
+      function geocodeAddress(geocoder, resultsMap, addr) {
+        var address = addr
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUk8QtlJRZ4_-o4YRacu59TUZuA6X1Qm8&callback=initMap"
+  	type="text/javascript"></script>
+  </div>
+    
 </body>
 </html>

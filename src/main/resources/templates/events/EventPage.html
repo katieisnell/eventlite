@@ -22,7 +22,8 @@
   h1{
   text-align: center;
  }
-  @media (min-width: 400px) {
+  @media (min-width: 500px) 
+  
   div {
     overflow: hidden;
   }
@@ -49,7 +50,12 @@
 <body>
   <div layout:fragment="content">
     <h1>Event Details</h1>
-
+	<style>
+  	#map {
+        height: 500px;
+        width: 500px;
+       }
+  	</style>
       <div id = "form1" th:object="${event}">
       <div>
       <label for="name">Event :</label>
@@ -72,6 +78,37 @@
             </form>
             <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
       </div>
+
+    <div id="map">Map goes here</div>
+        <script th:inline="javascript">
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 53.483959, lng: -2.244644}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+		var address = [[${event.venue.postcode}]]
+
+    	geocodeAddress(geocoder, map, address);
+      }
+
+      function geocodeAddress(geocoder, resultsMap, addr) {
+        geocoder.geocode({'address': addr}, function(results, status) {
+          if (status === 'OK') {
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUk8QtlJRZ4_-o4YRacu59TUZuA6X1Qm8&callback=initMap"
+  	type="text/javascript"></script>
 
   </div>
 
