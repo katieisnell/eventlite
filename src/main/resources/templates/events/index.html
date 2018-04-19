@@ -4,6 +4,8 @@
       layout:decorate="~{layouts/default}">
 <head>
   <title>All events</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+  
 </head>
 <body>
   <div layout:fragment="content">
@@ -19,7 +21,7 @@
 <style>
   	#map {
         height: 500px;
-        width: 500px;
+        width: 100%;
        }
   	</style>
 
@@ -47,6 +49,10 @@
       </tbody>
     </table>
     
+    <p>
+      <a class="btn btn-primary" role="button" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
+    </p>
+    
     <h1>Previous events</h1>
 
     <table class="table table-striped table-hover">
@@ -67,10 +73,8 @@
         </tr>
       </tbody>
     </table>
-     <p>
-      <a class="btn btn-primary" role="button" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
-    </p>
-        <div id="map">Map goes here</div>
+    
+    <div id="map">Map goes here</div>
         <script th:inline="javascript">
       function initMap() 
       {
@@ -84,6 +88,8 @@
 		var longitudes = [];
 
 		var names = [];
+		
+		var markers = [];
 		
 		/*[# th:each="e : ${futureEvents}"]*/
 
@@ -101,13 +107,21 @@
          	title: names[i],
           	label: names[i]
           });
+    	  
+    	  markers.push(marker);
 	    }
+		
+    	var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
       }
     </script>
-
+    
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUk8QtlJRZ4_-o4YRacu59TUZuA6X1Qm8&callback=initMap"
   	type="text/javascript"></script>
   </div>
-    
+   
 </body>
 </html>
