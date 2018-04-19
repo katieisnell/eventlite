@@ -42,7 +42,7 @@ public class HomeController {
 	private VenueService venueService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String getAllEvents(Model model) {
+	public String setUpHomePage(Model model) {
 
 		/* Finds upcoming 3 events */
 		model.addAttribute("next3Events", eventService.findNext3Events());
@@ -51,7 +51,7 @@ public class HomeController {
 	    Map <Venue, Integer> map = new HashMap<Venue, Integer>();
 		
 		for (Venue v : venueService.findAll()) {
-			List<Event> venueEvents = v.getEvents();			
+			List<Event> venueEvents = v.getEvents();	
 			map.put(v, venueEvents.size());
 		}
 		
@@ -67,21 +67,24 @@ public class HomeController {
 
 	    
 		List<Venue> top3Venues = new LinkedList<Venue>();
-		
-		top3Venues.add(0, list.get(0).getKey()); 
-		top3Venues.add(1, list.get(1).getKey()); 
-		top3Venues.add(2, list.get(2).getKey()); 
-		
 		List<Integer> top3VenuesCount = new LinkedList<Integer>();
 		
-		top3VenuesCount.add(0, list.get(0).getValue()); 
-		top3VenuesCount.add(1, list.get(1).getValue()); 
-		top3VenuesCount.add(2, list.get(2).getValue()); 
+		int count = 3;
+		if (list.size() < 3) {
+			count = list.size();
+		}
+		
+		for(int i = 0; i < count ; i++) {			
+			top3Venues.add(i, list.get(i).getKey()); 
+			top3VenuesCount.add(i, list.get(i).getValue()); 
+		}
 
 		model.addAttribute("top3Venues", top3Venues);
 		model.addAttribute("top3VenuesCount", top3VenuesCount);
 	    
 		return "home/index";
 	}
+	
+	
 	
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -75,6 +76,11 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Iterable<Event> findNext3Events() {
 		return eventRepository.findTop3ByDateAfterOrderByDateAscNameAsc(new Date());
+	}
+	
+	@Override
+	public long countByVenue(Venue venue) {
+		return eventRepository.countByVenue(venue);
 	}
 
 }
