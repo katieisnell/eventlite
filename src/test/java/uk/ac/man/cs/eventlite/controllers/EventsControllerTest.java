@@ -65,6 +65,17 @@ public class EventsControllerTest {
 
 	private MockMvc mvc;
 
+	private static final String TOOLONG = "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111" +
+			  				 "111111111111111111111111111111111111111111111111111111111111111111111111";
+			  
 	@Autowired
 	private Filter springSecurityFilterChain;
 
@@ -93,14 +104,14 @@ public class EventsControllerTest {
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> emptyList());
-		//when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
 		verifyZeroInteractions(event);
-		//verifyZeroInteractions(venue);
+		verifyZeroInteractions(venue);
 	}
 	
 	@Test
@@ -134,14 +145,14 @@ public class EventsControllerTest {
 	@Test
 	public void getIndexWithEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> singletonList(event));
-		//when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
 		verify(eventService).findAll();
 		verifyZeroInteractions(event);
-		//verifyZeroInteractions(venue);
+		verifyZeroInteractions(venue);
 	}
 
 	@Test
@@ -201,12 +212,9 @@ public class EventsControllerTest {
 
 	@Test
   public void deleteEvent() throws Exception {
-	  MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-    parameters.add("name", "abc");
-    parameters.add("date", "2018-10-15");
     mvc.perform(MockMvcRequestBuilders.delete("/events/1").with(user("Rob").roles(Security.ADMIN_ROLE))
               .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-              .params(parameters).accept(MediaType.TEXT_HTML).with(csrf()))
+              .accept(MediaType.TEXT_HTML).with(csrf()))
               .andExpect(status().isFound()).andExpect(content().string(""))
               .andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors());
   }
@@ -220,28 +228,6 @@ public class EventsControllerTest {
 
 		verify(eventService, times(1)).findById(1);
 		verify(venueService, times(1)).findAll();
-	}
-
-	@Test
-	public void getEventDetailsToUpdate() throws Exception
-	{
-		Date toReturnDate = new Date();
-		when(event.getName()).thenReturn("EventName");
-		when(event.getId()).thenReturn((long)1);
-		when(event.getDate()).thenReturn(toReturnDate);
-		when(event.getTime()).thenReturn(toReturnDate);
-		when(event.getVenue()).thenReturn(venue);
-		when(event.getDescription()).thenReturn("Description");
-
-		mvc.perform(MockMvcRequestBuilders.get("/events/1").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
-		.andExpect(view().name("events/update")).andExpect(handler().methodName("updateR"));
-
-		assertEquals("EventName", event.getName());
-		assertEquals((long)1, event.getId());
-		assertEquals(toReturnDate, event.getDate());
-		assertEquals(toReturnDate, event.getTime());
-		assertEquals(venue, event.getVenue());
-		assertEquals("Description", event.getDescription());
 	}
 
 	@Test
@@ -287,24 +273,22 @@ public class EventsControllerTest {
 		.andExpect(handler().methodName("updateSave")).andExpect(flash().attributeExists("ok_message"));
 
 		verify(eventService).save(arg.capture());
+		assertEquals(arg.getValue().getId(), 1);
+		assertEquals(arg.getValue().getName(), "EventName");
+		assertEquals(arg.getValue().getDate(), new Date(119, 00, 01));
 	}
 
 	@Test
 	public void updateEventLongName() throws Exception
 	{
-		String longName = "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111";
-
 		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
-				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", longName)
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", TOOLONG)
 				.param("date", "2019-01-01").param("time","10:30")
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isOk()).andExpect(view().name("events/update"))
 		.andExpect(model().attributeHasFieldErrors("event", "name"))
-		.andExpect(handler().methodName("updateSave"));
+		.andExpect(handler().methodName("updateSave"))
+		.andExpect(flash().attributeCount(0));
 
 		verify(eventService, never()).save(event);
 	}
@@ -318,7 +302,8 @@ public class EventsControllerTest {
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isOk()).andExpect(view().name("events/update"))
 		.andExpect(model().attributeHasFieldErrors("event", "name"))
-		.andExpect(handler().methodName("updateSave"));
+		.andExpect(handler().methodName("updateSave"))
+		.andExpect(flash().attributeCount(0));
 
 		verify(eventService, never()).save(event);
 	}
@@ -333,7 +318,8 @@ public class EventsControllerTest {
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isOk()).andExpect(view().name("events/update"))
 		.andExpect(model().attributeHasFieldErrors("event", "date"))
-		.andExpect(handler().methodName("updateSave"));
+		.andExpect(handler().methodName("updateSave"))
+		.andExpect(flash().attributeCount(0));
 
 		verify(eventService, never()).save(event);
 	}
@@ -341,24 +327,14 @@ public class EventsControllerTest {
 	@Test
 	public void updateEventLongDescription() throws Exception
 	{
-		String longDescription = "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111" +
-						  "111111111111111111111111111111111111111111111111111111111111111111111111";
-
 		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
-				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", longDescription)
-				.param("date", "2019-01-01").param("time","10:30").param("description", longDescription)
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", "EventName")
+				.param("date", "2019-01-01").param("time","10:30").param("description", TOOLONG)
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isOk()).andExpect(view().name("events/update"))
 		.andExpect(model().attributeHasFieldErrors("event", "description"))
-		.andExpect(handler().methodName("updateSave"));
+		.andExpect(handler().methodName("updateSave"))
+		.andExpect(flash().attributeCount(0));
 
 		verify(eventService, never()).save(event);
 	}

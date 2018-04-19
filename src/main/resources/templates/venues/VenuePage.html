@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 <head>
-  <title>Event Details</title>
+  <title>Venue Details</title>
    <style>
   * {
   box-sizing: border-box;
@@ -32,6 +32,11 @@
     width: calc(100% - 200px);
     width: 100%;
     }
+    li{
+    float: left;
+    width: calc(100% - 200px);
+    width: 100%;
+    }
 
   label {
     font-size:35px;
@@ -48,29 +53,32 @@
 </head>
 <body>
   <div layout:fragment="content">
-    <h1>Event Details</h1>
+    <h1>Venue Details</h1>
 
-      <div id = "form1" th:object="${event}">
+      <div id = "form1" th:object="${venue}">
       <div>
-      <label for="name">Event :</label>
-      <p th:text="${event.name}"> </p>
+      <label for="name">Venue :</label>
+      <p th:text="${venue.name}"> </p>
+  
+      <label for="address">Event address :</label>
+      <p th:text="${venue.roadName} + ',' + ${venue.postcode}"> </p>
       
-      <label for="venue" id="venueLabel">Venue :</label>
-      <a th:href="@{../venues/venue(vname=${event.venue.id})}"> <p th:text="${event.venue.name}"> </p> </a>
+      <label for="capacity">Venue capacity :</label>
+      <p th:text="${venue.capacity}"> </p>
       
-      <label for="date">Event date :</label>
-      <p th:text="${event.date}"> </p>
+      <label for="allEvents">Events coming up:</label>
+      <ul th:each="e : ${events}" >
+      <li>
+          <a th:href="@{../events/event(ename=${e.id})}">  <p th:text="${e.name}"> </p> </a>  
+           </li>
+      </ul>
       
-      <label for="time">Event time :</label>
-      <p th:text="${event.time}"> </p>
       
-      <label id="label">Description :</label>
-      <p th:text="${event.description}"> </p>
       </div>
-            <form th:action="@{/events/{num}(num=${event.id})}" th:method="delete">
+            <form th:action="@{/venues/{num}(num=${venue.id})}" th:method="delete">
             <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
             </form>
-            <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
+            <a id="a" class="btn btn-warning" role="button" href="/venues"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
       </div>
 
   </div>
