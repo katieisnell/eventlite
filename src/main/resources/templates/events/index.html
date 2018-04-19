@@ -91,12 +91,20 @@
 		
 		var markers = [];
 		
+		var date = [];
+		
+		var time = [];
+		
+		var venue = [];
+		
 		/*[# th:each="e : ${futureEvents}"]*/
 
 		latitudes.push("[(${e.venue.latitude})]");
 		longitudes.push("[(${e.venue.longitude})]");
 		names.push("[(${e.name})]");
-		
+		date.push("[(${e.date})]");
+		time.push("[(${e.time})]");
+		venue.push("[(${e.venue.name})]");
 		/*[/]*/
 
     	for (i = 0; i < names.length; i++)
@@ -107,6 +115,21 @@
          	title: names[i],
           	label: names[i]
           });
+    	  
+    	  var infoWindowContent = '<h4>Event name:' + names[i] + '</h4><br>' +
+    	  						  '<h5>Date: </h5>' + date[i] + '<br>' +
+    	  						  '<h5>Time: </h5>' + time[i] + '</h5><br>' +
+    	  						  '<h5>Venue: </h5>' + venue[i];
+    	  var infoWindow = new google.maps.InfoWindow({content: infoWindowContent});
+    	  
+    	  google.maps.event.addListener(marker, 'click', (function(marker, content,infoWindow) {
+              return function() {
+                  infoWindow.setContent(content);
+                  infoWindow.open(map, marker);
+              }
+          })(marker, infoWindowContent,infoWindow));
+    	  
+    	  
     	  
     	  markers.push(marker);
 	    }
