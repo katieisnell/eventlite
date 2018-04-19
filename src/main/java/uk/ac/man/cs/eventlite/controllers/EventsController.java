@@ -1,9 +1,14 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.twitter.api.CursoredList;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +36,17 @@ public class EventsController {
 	
 	@Autowired
 	private VenueService venueService;
+	
+	private Twitter twitter;
+
+    private ConnectionRepository connectionRepository;
+
+    @Inject
+    public EventsController(Twitter twitter, ConnectionRepository connectionRepository) {
+        this.twitter = twitter;
+        this.connectionRepository = connectionRepository;
+    }
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
