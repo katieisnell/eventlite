@@ -47,6 +47,11 @@ public class Venue {
 	@Size(max = 300, message = "The road name should have a maximum of 300 characters")
 	private String roadName;
 	
+	@Column (name = "latitude")
+	private double latitude;
+	
+	@Column (name = "longitude")
+	private double longitude;
 
 	@OneToMany(mappedBy = "venue")
 	private List<Event> events;
@@ -103,5 +108,21 @@ public class Venue {
 
 	public void setRoadName(String roadName) {
 		this.roadName = roadName;
+	}
+	
+	public void setLatitude(Double latitude){
+		this.latitude = latitude;
+	}
+	
+	public void setLongitude(Double longitude){
+		this.longitude = longitude;
+	}
+	
+	public double getLatitude(){
+		return latitude;
+	}
+	
+	public double getLongitude(){
+		return longitude;
 	}
 }

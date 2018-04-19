@@ -81,28 +81,26 @@
 
     <div id="map">Map goes here</div>
         <script th:inline="javascript">
-      function initMap() {
+      function initMap() 
+      {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10,
           center: {lat: 53.483959, lng: -2.244644}
         });
+        
         var geocoder = new google.maps.Geocoder();
 
-		var address = [[${event.venue.postcode}]]
+		var latitude = [[${event.venue.latitude}]]
+		
+		var longitude = [[${event.venue.longitude}]]	
 
-    	geocodeAddress(geocoder, map, address);
-      }
-
-      function geocodeAddress(geocoder, resultsMap, addr) {
-        geocoder.geocode({'address': addr}, function(results, status) {
-          if (status === 'OK') {
-            var marker = new google.maps.Marker({
-              map: resultsMap,
-              position: results[0].geometry.location
-            });
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
+		var eventName = [[${event.name}]]
+    	
+    	var marker = new google.maps.Marker({
+          position: {lat: latitude, lng: longitude},
+          map: map,
+          title: eventName,
+          label: eventName
         });
       }
     </script>

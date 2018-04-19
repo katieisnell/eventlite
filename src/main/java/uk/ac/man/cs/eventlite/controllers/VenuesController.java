@@ -1,6 +1,8 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -60,13 +68,17 @@ public class VenuesController {
 	
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createVenue(@RequestBody @Valid @ModelAttribute Venue venue,
-			BindingResult errors, Model model, RedirectAttributes redirectAttrs) {
+			BindingResult errors, Model model, RedirectAttributes redirectAttrs) throws ApiException, InterruptedException, IOException {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("venue", venue);
 			return "venues/new";
 		}
-
+		
+		double[] latLong = getLatLong(venue.getPostcode());
+		
+		venue.setLatitude(latLong[0]);
+		venue.setLongitude(latLong[1]);
 		venueService.save(venue);
 		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
 
@@ -85,18 +97,23 @@ public class VenuesController {
 	      @RequestBody @Valid @ModelAttribute Venue venue,
 	            BindingResult errors,
 	            Model model,
-	            RedirectAttributes redirectAttrs)
+	            RedirectAttributes redirectAttrs) throws ApiException, InterruptedException, IOException
 	  {
 	    if (errors.hasErrors())
 	    {
 	      model.addAttribute("venues", venueService.findAll());
 	            return "venues/update";
-	        }
+	    }
+	    
+	    double[] latLong = getLatLong(venue.getPostcode());
+		
+		venue.setLatitude(latLong[0]);
+		venue.setLongitude(latLong[1]);
 
-	        venueService.save(venue);
+	    venueService.save(venue);
 
-	        redirectAttrs.addFlashAttribute("ok_message", "Event succesfully updated");
-	        return "redirect:/venues";
+	    redirectAttrs.addFlashAttribute("ok_message", "Event succesfully updated");
+	    return "redirect:/venues";
 	  }
   
 
@@ -112,4 +129,15 @@ public class VenuesController {
       model.addAttribute("search", venueService.listVenuesByName(name));
       return "venues/search";
 	}
+  
+  private double[] getLatLong(String address) throws ApiException, InterruptedException, IOException
+  {
+	  GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyAUk8QtlJRZ4_-o4YRacu59TUZuA6X1Qm8").build();
+	  GeocodingResult[] results =  GeocodingApi.geocode(context, address).await();
+		
+		String[] latlong =  results[0].geometry.location.toString().split(","); 
+		double[] latAndLong = {Double.parseDouble(latlong[0]),Double.parseDouble(latlong[1])};
+		context.shutdown();
+		return latAndLong;
+  }
 }
