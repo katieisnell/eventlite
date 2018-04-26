@@ -45,6 +45,7 @@ public class Event {
 	private String description;
 
 
+	private String text;
 	public Event() {
 	}
 
@@ -56,6 +57,10 @@ public class Event {
 		this.id = id;
 	}
 
+	 public void setText(String text) {
+	    this.text = text;
+	  }
+	 
 	public Date getDate() {
 		return date;
 	}
@@ -92,6 +97,10 @@ public class Event {
 	public String getDescription() {
 		return description;
 	}
+	
+	public String getText() {
+    return text;
+  }
 
 	public void setDescription(String description) {
 		this.description = description;

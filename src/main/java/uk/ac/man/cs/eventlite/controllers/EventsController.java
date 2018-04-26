@@ -71,6 +71,17 @@ public class EventsController {
 		return "events/index";
 	}
 
+	 @RequestMapping(value="/tweet", method = RequestMethod.GET)
+	  public String tweet(Model model,  @RequestParam("text") String text, RedirectAttributes redirectAttrs) {
+	    System.out.println("Control came here...");
+	    if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+	      return "redirect:/connect/twitter";
+	  }
+	    Tweet tweet = twitter.timelineOperations().updateStatus(text);
+	    System.out.println(text);
+	    redirectAttrs.addFlashAttribute("ok_message", text + " sent!");
+	    return "redirect:/events";
+	  }
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String newEvent(Model model,@ModelAttribute("event")Event event) {
 		if (!model.containsAttribute("events")) {
