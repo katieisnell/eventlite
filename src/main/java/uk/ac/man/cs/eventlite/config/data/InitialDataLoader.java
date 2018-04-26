@@ -126,7 +126,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		/* Week 6: Event to show "Upcoming 3 events" is working */
 		Event eventExtra = new Event();
 		eventExtra.setName("Event Extra");
-		eventExtra.setVenue(venueA);
+		eventExtra.setVenue(VenueA);
 		Date extraDate = new Date(118, 07, 13, 00, 00);
 		eventExtra.setDate(extraDate); // (year + 1900, month, day, hour, minute)
 		
