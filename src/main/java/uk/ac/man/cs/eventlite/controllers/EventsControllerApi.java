@@ -47,6 +47,11 @@ public class EventsControllerApi {
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Resource<Event> getEvent(@PathVariable("id") long id) {
+    	return eventToResource(eventService.findById(id));
+    }
+    
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createEvent(@RequestBody @Valid Event event, BindingResult result) {
 
