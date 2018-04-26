@@ -39,7 +39,7 @@ public class HomePageTest {
 
 	@Test
 	public void getJsonRoot() throws Exception {
-		mvc.perform(get("/").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+		mvc.perform(get("/").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotAcceptable());
 	}
 
 	@Test

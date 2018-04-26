@@ -123,6 +123,13 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Date appleDate = new Date(118, 07, 12, 00, 00);
 		eventApple.setDate(appleDate); // (year + 1900, month, day, hour, minute)
 		
+		/* Week 6: Event to show "Upcoming 3 events" is working */
+		Event eventExtra = new Event();
+		eventExtra.setName("Event Extra");
+		eventExtra.setVenue(VenueA);
+		Date extraDate = new Date(118, 07, 13, 00, 00);
+		eventExtra.setDate(extraDate); // (year + 1900, month, day, hour, minute)
+		
 		
 		Event eventFormer = new Event();
 		eventFormer.setName("Event Former");
@@ -151,5 +158,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		eventService.save(eventApple);
 		eventService.save(eventBeta);
 		eventService.save(eventAlpha);
+		eventService.save(eventExtra);
 	}
 }
