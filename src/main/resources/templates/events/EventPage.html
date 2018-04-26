@@ -90,11 +90,17 @@
         
         var geocoder = new google.maps.Geocoder();
 
-		var latitude = [[${event.venue.latitude}]]
+		var latitude = [[${event.venue.latitude}]];
 		
-		var longitude = [[${event.venue.longitude}]]	
+		var longitude = [[${event.venue.longitude}]];	
 
-		var eventName = [[${event.name}]]
+		var eventName = [[${event.name}]];
+		
+		var date = [[${event.date}]];
+		
+		var time = [[${event.time}]];
+		
+		var venue = [[${event.venue.name}]];
     	
     	var marker = new google.maps.Marker({
           position: {lat: latitude, lng: longitude},
@@ -102,6 +108,20 @@
           title: eventName,
           label: eventName
         });
+		
+		
+		var infoWindowContent = '<h4>Event name:' + eventName + '</h4><br>' +
+		  '<h5>Date: </h5>' + date + '<br>' +
+		  '<h5>Time: </h5>' + time + '</h5><br>' +
+		  '<h5>Venue: </h5>' + venue;
+		var infoWindow = new google.maps.InfoWindow({content: infoWindowContent});
+
+		google.maps.event.addListener(marker, 'click', (function(marker, content,infoWindow) {
+			return function() {
+				infoWindow.setContent(content);
+				infoWindow.open(map, marker);
+			}
+		})(marker, infoWindowContent,infoWindow));
       }
     </script>
 
