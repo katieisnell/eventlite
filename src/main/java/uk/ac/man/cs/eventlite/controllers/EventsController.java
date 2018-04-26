@@ -46,6 +46,7 @@ public class EventsController {
         this.twitter = twitter;
         this.connectionRepository = connectionRepository;
     }
+    
 
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -55,6 +56,14 @@ public class EventsController {
 		model.addAttribute("pastEvents", eventService.findPastEvents());
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
+		
+		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+            return "redirect:/connect/twitter";
+        }
+
+        model.addAttribute(twitter.userOperations().getUserProfile());
+        CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
+        model.addAttribute("friends", friends);
 
 		return "events/index";
 	}

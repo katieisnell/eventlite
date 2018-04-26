@@ -38,6 +38,9 @@ public class Security extends WebSecurityConfigurerAdapter {
 
 		// Disable X-Frame-Options for the H2 console.
 		http.headers().frameOptions().disable();
+		
+		//DISABLED FOR TESTING
+		http.csrf().disable();
 	}
 
 	@Autowired
