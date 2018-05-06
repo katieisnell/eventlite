@@ -16,6 +16,9 @@
         <input type="text" name="search" id="search"/>
         <a th:href="@{/events/search}"><input type="submit" value="Search!" class="btn btn-success"/></a>
     </form>
+    <form action="#" th:object="${event}" th:action="@{/events/twitterButton}" th:method="get">
+        <a th:href="@{/events/twitterButton}"><input type="submit" value="Connect Twitter!" class="btn btn-success"/></a>
+    </form>
 	</div>
     <h1>Upcoming events</h1>
 <style>
@@ -74,6 +77,28 @@
         </tr>
       </tbody>
     </table>
+
+     <p>
+      <a class="btn btn-primary" role="button" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
+    </p>
+    
+    <div th:unless="${#lists.size(tweets) == 0}">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fa fa-calendar"></i> Date</th>
+          <th><i class="fa fa-bolt"></i> Tweet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="t : ${tweets}">
+			<td th:text="${t.createdAt}">Date</td>
+			<td> <a th:href="'https://twitter.com/EventLiteG02_18/status/' + ${t.idStr}" <p th:text="${t.text}">Tweet</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  
     
     <div id="map">Map goes here</div>
         <script th:inline="javascript">
@@ -98,7 +123,6 @@
 		
 		var venue = [];
 		
-		/*[# th:each="e : ${futureEvents}"]*/
 
 		latitudes.push("[(${e.venue.latitude})]");
 		longitudes.push("[(${e.venue.longitude})]");

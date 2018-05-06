@@ -2,8 +2,7 @@ package uk.ac.man.cs.eventlite.controllers;
 
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -21,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +38,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.social.twitter.api.TimelineOperations;
+import org.springframework.social.twitter.api.Tweet;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.UserOperations;
+import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -90,22 +96,48 @@ public class EventsControllerTest {
 
 	@Mock
 	private VenueService venueService;
+	
+	@Mock
+	private Twitter twitter;
+	
+	@Mock
+	private UserOperations userOperations;
+	
+	@Mock
+	private TimelineOperations timelineOperations;
+
+	@Mock
+	private TwitterProfile twitterProfile;
 
 	@InjectMocks
 	private EventsController eventsController;
-
+	
+	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		mvc = MockMvcBuilders.standaloneSetup(eventsController).apply(springSecurity(springSecurityFilterChain))
 				.build();
 	}
+	
+	@Test
+	public void isAuthorizedForUser() {
+		TwitterTemplate twitterTemplate = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
+		assertTrue(twitterTemplate.isAuthorized());
+	}
 
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
-
+		
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
+		
+		
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
 
@@ -118,6 +150,11 @@ public class EventsControllerTest {
 	public void getIndexWhenNoFutureEvents() throws Exception {
 		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -132,6 +169,11 @@ public class EventsControllerTest {
 	public void getIndexWhenNoPastEvents() throws Exception {
 		when(eventService.findPastEvents()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -146,6 +188,11 @@ public class EventsControllerTest {
 	public void getIndexWithEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -380,6 +427,11 @@ public class EventsControllerTest {
 	public void getIndexWithFutureEvents() throws Exception {
 		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -394,6 +446,11 @@ public class EventsControllerTest {
 	public void getIndexWithPastEvents() throws Exception {
 		when(eventService.findPastEvents()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));

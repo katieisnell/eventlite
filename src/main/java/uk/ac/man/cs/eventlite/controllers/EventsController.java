@@ -1,9 +1,19 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.social.MissingAuthorizationException;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.twitter.api.CursoredList;
+import org.springframework.social.twitter.api.Tweet;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +41,18 @@ public class EventsController {
 	
 	@Autowired
 	private VenueService venueService;
+	
+	private Twitter twitter;
+
+    private ConnectionRepository connectionRepository;
+
+    @Inject
+    public EventsController(Twitter twitter, ConnectionRepository connectionRepository) {
+        this.twitter = twitter;
+        this.connectionRepository = connectionRepository;
+    }
+    
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllEvents(Model model) {
@@ -39,10 +61,43 @@ public class EventsController {
 		model.addAttribute("pastEvents", eventService.findPastEvents());
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
+		
+		
+		List<Tweet> tweets = new ArrayList<Tweet>();
+		
+		
+		try{
+			model.addAttribute(twitter.userOperations().getUserProfile());
+			tweets = twitter.timelineOperations().getUserTimeline(5);
+		}
+		catch(MissingAuthorizationException e) {};
+		
+		model.addAttribute("tweets", tweets);
+        
 
 		return "events/index";
 	}
+	
+	@RequestMapping(value="/twitterButton", method = RequestMethod.GET)
+	public String twitterButton(Model model) {
+		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+            return "redirect:/connect/twitter";
+        }
+		else
+			return "redirect:/events";
+	}
 
+	 @RequestMapping(value="/tweet", method = RequestMethod.GET)
+	  public String tweet(Model model,  @RequestParam("text") String text, RedirectAttributes redirectAttrs) {
+	    System.out.println("Control came here...");
+	    if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+	      return "redirect:/connect/twitter";
+	  }
+	    Tweet tweet = twitter.timelineOperations().updateStatus(text);
+	    System.out.println(text);
+	    redirectAttrs.addFlashAttribute("ok_message", text + " sent!");
+	    return "redirect:/events";
+	  }
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String newEvent(Model model,@ModelAttribute("event")Event event) {
 		if (!model.containsAttribute("events")) {
