@@ -294,7 +294,7 @@ public class EventsControllerTest {
 	}
 
 	@Test
-	public void updateEventNoName() throws Exception
+	public void updateEventEmptyName() throws Exception
 	{
 		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", "")
@@ -315,6 +315,20 @@ public class EventsControllerTest {
 		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", "EventName")
 				.param("date", "2015-01-01")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isOk()).andExpect(view().name("events/update"))
+		.andExpect(model().attributeHasFieldErrors("event", "date"))
+		.andExpect(handler().methodName("updateSave"))
+		.andExpect(flash().attributeCount(0));
+
+		verify(eventService, never()).save(event);
+	}
+	
+	@Test
+	public void updateNoDate() throws Exception
+	{
+		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", "EventName")
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 		.andExpect(status().isOk()).andExpect(view().name("events/update"))
 		.andExpect(model().attributeHasFieldErrors("event", "date"))
