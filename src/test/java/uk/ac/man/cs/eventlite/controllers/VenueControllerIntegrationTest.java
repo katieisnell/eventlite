@@ -36,14 +36,13 @@ import uk.ac.man.cs.eventlite.EventLite;
 @SpringBootTest(classes = EventLite.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 @ActiveProfiles("test")
-public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class VenueControllerIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	@LocalServerPort
 	private int port;
 	
 	private String loginUrl;
 	private String baseUrl;
-	private String searchURL;
 
 	private HttpEntity<String> httpEntity;
 	
@@ -60,8 +59,7 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 	public void setup() {
 		
 		this.loginUrl = "http://localhost:" + port + "/sign-in";
-		this.baseUrl = "http://localhost:" + port + "/events";
-		this.searchURL=  "http://localhost:" + port + "/events/search";
+		this.baseUrl = "http://localhost:" + port + "/venues";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
 
@@ -69,123 +67,36 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 	}
 
 	@Test
-	public void testGetAllEvents() {
-		ResponseEntity<String> response = template.exchange("/events", HttpMethod.GET, httpEntity, String.class);
+	public void testGetAllVenues() {
+		ResponseEntity<String> response = template.exchange("/venues", HttpMethod.GET, httpEntity, String.class);
 
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
 	}
 	
-	@Test
-	public void testSearch() {
-
-		ResponseEntity<String> response = template.exchange("/events/search", HttpMethod.GET, httpEntity, String.class);
-
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-	}	
 	
 	@Test
-	public void testLogin() {
-		stateful = new TestRestTemplate(HttpClientOption.ENABLE_COOKIES);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
-
-		HttpEntity<String> formEntity = new HttpEntity<>(headers);
-		ResponseEntity<String> formResponse = stateful.exchange(loginUrl, HttpMethod.GET, formEntity, String.class);
-		String csrfToken = getCsrfToken(formResponse.getBody());
-		String cookie = formResponse.getHeaders().getFirst("Set-Cookie");
-
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.set("Cookie", cookie);
-
-		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
-		login.add("_csrf", csrfToken);
-		login.add("username", "Markel");
-		login.add("password", "Vigo");
-
-		HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<MultiValueMap<String, String>>(login,
-				headers);
-		ResponseEntity<String> loginResponse = stateful.exchange(loginUrl, HttpMethod.POST, postEntity, String.class);
-		assertThat(loginResponse.getStatusCode(), equalTo(HttpStatus.FOUND));
-		assertThat(loginResponse.getHeaders().getLocation().toString(), endsWith(":" + this.port + "/"));
-	}
-	
-	@Test
-	public void testBadUserLogin() {
-		stateful = new TestRestTemplate(HttpClientOption.ENABLE_COOKIES);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
-
-		HttpEntity<String> formEntity = new HttpEntity<>(headers);
-		ResponseEntity<String> formResponse = stateful.exchange(loginUrl, HttpMethod.GET, formEntity, String.class);
-		String csrfToken = getCsrfToken(formResponse.getBody());
-		String cookie = formResponse.getHeaders().getFirst("Set-Cookie");
-
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.set("Cookie", cookie);
-
-		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
-		login.add("_csrf", csrfToken);
-		login.add("username", "Robert");
-		login.add("password", "Haines");
-
-		HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<MultiValueMap<String, String>>(login,
-				headers);
-		ResponseEntity<String> loginResponse = stateful.exchange(loginUrl, HttpMethod.POST, postEntity, String.class);
-		assertThat(loginResponse.getStatusCode(), equalTo(HttpStatus.FOUND));
-		assertThat(loginResponse.getHeaders().getLocation().toString(), endsWith("/sign-in?error"));
-	}
-	
-	@Test
-	public void testBadPasswordLogin() {
-		stateful = new TestRestTemplate(HttpClientOption.ENABLE_COOKIES);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
-
-		HttpEntity<String> formEntity = new HttpEntity<>(headers);
-		ResponseEntity<String> formResponse = stateful.exchange(loginUrl, HttpMethod.GET, formEntity, String.class);
-		String csrfToken = getCsrfToken(formResponse.getBody());
-		String cookie = formResponse.getHeaders().getFirst("Set-Cookie");
-
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.set("Cookie", cookie);
-
-		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
-		login.add("_csrf", csrfToken);
-		login.add("username", "Caroline");
-		login.add("password", "J");
-
-		HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<MultiValueMap<String, String>>(login,
-				headers);
-		ResponseEntity<String> loginResponse = stateful.exchange(loginUrl, HttpMethod.POST, postEntity, String.class);
-		assertThat(loginResponse.getStatusCode(), equalTo(HttpStatus.FOUND));
-		assertThat(loginResponse.getHeaders().getLocation().toString(), endsWith("/sign-in?error"));
-	}
-	
-	@Test
-	public void postEventNoLogin() {
+	public void postVenueNoLogin() {
 		HttpHeaders postHeaders = new HttpHeaders();
 		postHeaders.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
 		postHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-		form.add("name", "COMP23412 Showcase, group G");
-		form.add("date", "2019-10-15");
-		form.add("time", "12:10");
+		form.add("name", "Venue W");
+		form.add("capacity", "2019");
+		form.add("roadName", "Tong Avenue");
+		form.add("postcode", "M1 5SX");
 		HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<MultiValueMap<String, String>>(form,
 				postHeaders);
 
 		ResponseEntity<String> response = anon.exchange(baseUrl, HttpMethod.POST, postEntity, String.class);
 
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
-		assertThat(11, equalTo(countRowsInTable("events")));
+		assertThat(4, equalTo(countRowsInTable("venues")));
 	}
 	
 	@Test
 	@DirtiesContext
-	public void postEventWithLogin() {
+	public void postVenueWithLogin() {
 		stateful = new TestRestTemplate(HttpClientOption.ENABLE_COOKIES);
 
 		// Set up headers for GETting and POSTing.
@@ -226,9 +137,10 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 		// Populate the new event form.
 		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
 		form.add("_csrf", csrfToken);
-		form.add("name", "COMP23412 Showcase, group G");
-		form.add("date", "2019-10-15");
-		form.add("time", "12:10");
+		form.add("name", "Venue W");
+		form.add("capacity", "2019");
+		form.add("roadName", "Tong Avenue");
+		form.add("postcode", "M1 5SX");
 		postEntity = new HttpEntity<MultiValueMap<String, String>>(form, postHeaders);
 
 		// POST the new event.
@@ -237,7 +149,7 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 		// Did it work?
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.FOUND));
 		assertThat(response.getHeaders().getLocation().toString(), containsString(baseUrl));
-		assertThat(12, equalTo(countRowsInTable("events")));
+		assertThat(5, equalTo(countRowsInTable("venues")));
 	}
 	
 	private String getCsrfToken(String body) {
@@ -250,5 +162,3 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 		return matcher.group(1);
 	}
 }
-
-
