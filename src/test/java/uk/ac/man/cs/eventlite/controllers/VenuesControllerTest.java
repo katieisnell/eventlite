@@ -396,4 +396,26 @@ public class VenuesControllerTest {
 
 		verify(venueService).findOne(venue.getId());
 	}
+	
+	
+  @Test
+  public void getLatLongWithPostcodeInMap() throws Exception{
+    ArgumentCaptor<Venue> arg = ArgumentCaptor.forClass(Venue.class);
+    mvc.perform(MockMvcRequestBuilders.post("/venues").with(user("Rob").roles(Security.ADMIN_ROLE))
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        .param("name","university place")
+        .param("capacity","50")
+        .param("roadName","oxford road")
+        .param("postcode","M13 9PL")
+        .accept(MediaType.TEXT_HTML).with(csrf()))
+    .andExpect(status().isFound()).andExpect(content().string(""))
+    .andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors())
+    .andExpect(handler().methodName("createVenue")).andExpect(flash().attributeExists("ok_message"));
+
+    verify(venueService).save(arg.capture());
+    assertThat(53.4667506, equalTo(arg.getValue().getLatitude()));
+    assertThat(-2.2336761, equalTo(arg.getValue().getLongitude()));
+    
+  }
+
 }

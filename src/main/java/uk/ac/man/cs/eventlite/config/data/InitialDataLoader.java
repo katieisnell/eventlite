@@ -39,13 +39,17 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		VenueZ.setCapacity(50);
 		VenueZ.setRoadName("53 Manchester Road");
 		VenueZ.setPostcode("E15 3BD");
-    venueService.save(VenueZ);
+		VenueZ.setLatitude(53.473313);
+		VenueZ.setLongitude(-2.146949);
+		venueService.save(VenueZ);
 
 		Venue VenueA = new Venue();
 		VenueA.setName("Venue A");
 		VenueA.setCapacity(50);
 		VenueA.setRoadName("23 Manchester Road");
 		VenueA.setPostcode("E14 3BD");
+		VenueA.setLatitude(51.487689);
+		VenueA.setLongitude(-0.012200);
 		venueService.save(VenueA);
 
 		Venue VenueB = new Venue();
@@ -53,6 +57,8 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		VenueB.setCapacity(1000);
 		VenueB.setRoadName("Highland Road");
 		VenueB.setPostcode("S43 2EZ");
+		VenueB.setLatitude(53.279973);
+		VenueB.setLongitude(-1.401754);
 		venueService.save(VenueB);
 		
 		Venue VenueC = new Venue();
@@ -60,6 +66,8 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		VenueC.setCapacity(10);
 		VenueC.setRoadName("19 Acacia Avenue");
 		VenueC.setPostcode("WA15 8QY");
+		VenueC.setLatitude(53.382103);
+		VenueC.setLongitude(-2.337370);
 		venueService.save(VenueC);
 		
 		
@@ -123,6 +131,13 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Date appleDate = new Date(118, 07, 12, 00, 00);
 		eventApple.setDate(appleDate); // (year + 1900, month, day, hour, minute)
 		
+		/* Week 6: Event to show "Upcoming 3 events" is working */
+		Event eventExtra = new Event();
+		eventExtra.setName("Event Extra");
+		eventExtra.setVenue(VenueA);
+		Date extraDate = new Date(118, 07, 13, 00, 00);
+		eventExtra.setDate(extraDate); // (year + 1900, month, day, hour, minute)
+		
 		
 		Event eventFormer = new Event();
 		eventFormer.setName("Event Former");
@@ -151,5 +166,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		eventService.save(eventApple);
 		eventService.save(eventBeta);
 		eventService.save(eventAlpha);
+		eventService.save(eventExtra);
 	}
 }
