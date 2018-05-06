@@ -1,6 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertThat;
 
@@ -170,6 +171,63 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 
 		assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
 		assertThat(11, equalTo(countRowsInTable("events")));
+	}
+	
+	@Test
+	@DirtiesContext
+	public void postEventWithLogin() {
+		stateful = new TestRestTemplate(HttpClientOption.ENABLE_COOKIES);
+
+		// Set up headers for GETting and POSTing.
+		HttpHeaders getHeaders = new HttpHeaders();
+		getHeaders.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
+
+		HttpHeaders postHeaders = new HttpHeaders();
+		postHeaders.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
+		postHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+		// GET the log in page so we can read the CSRF token and the session
+		// cookie.
+		HttpEntity<String> getEntity = new HttpEntity<>(getHeaders);
+		ResponseEntity<String> formResponse = stateful.exchange(loginUrl, HttpMethod.GET, getEntity, String.class);
+		String csrfToken = getCsrfToken(formResponse.getBody());
+		String cookie = formResponse.getHeaders().getFirst("Set-Cookie").split(";")[0];
+
+		// Set the session cookie and populate the log in form.
+		postHeaders.set("Cookie", cookie);
+		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
+		login.add("_csrf", csrfToken);
+		login.add("username", "Rob");
+		login.add("password", "Haines");
+
+		// Log in.
+		HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<MultiValueMap<String, String>>(login,
+				postHeaders);
+		ResponseEntity<String> loginResponse = stateful.exchange(loginUrl, HttpMethod.POST, postEntity, String.class);
+		assertThat(loginResponse.getStatusCode(), equalTo(HttpStatus.FOUND));
+
+		// Set the session cookie and GET the new event form so we can read
+		// the new CSRF token.
+		getHeaders.set("Cookie", cookie);
+		getEntity = new HttpEntity<>(getHeaders);
+		formResponse = stateful.exchange(loginUrl, HttpMethod.GET, getEntity, String.class);
+		csrfToken = getCsrfToken(formResponse.getBody());
+
+		// Populate the new event form.
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+		form.add("_csrf", csrfToken);
+		form.add("name", "COMP23412 Showcase, group G");
+		form.add("date", "2019-10-15");
+		form.add("time", "12:10");
+		postEntity = new HttpEntity<MultiValueMap<String, String>>(form, postHeaders);
+
+		// POST the new event.
+		ResponseEntity<String> response = stateful.exchange(baseUrl, HttpMethod.POST, postEntity, String.class);
+
+		// Did it work?
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.FOUND));
+		assertThat(response.getHeaders().getLocation().toString(), containsString(baseUrl));
+		assertThat(12, equalTo(countRowsInTable("events")));
 	}
 	
 	private String getCsrfToken(String body) {
