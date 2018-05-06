@@ -8,6 +8,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/webjars/font-awesome/css/font-awesome.min.css" />
+  <style>
+  #twitter {
+    font-size: 17px;
+    width: 200px;
+    text-decoration: none;
+    background: #55ACEE;
+    color: white;
+    float: right;
+  }
+  #twitter:hover {
+    opacity: 0.7;
+  }
+  #home{
+    margin-top: 0.3rem;
+    float:right;
+    margin-right: 50px;
+    }
+    #btns{
+    float:right;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,13 +39,20 @@
         <i class="fa fa-sign-in" aria-hidden="true"></i> Sign in
       </a>
     </div>
-    <div sec:authorize="isAuthenticated()">
+    <div class="log" sec:authorize="isAuthenticated()">
       <form th:action="@{/sign-out}" method="post">
         <i class="fa fa-user" aria-hidden="true"></i> Signed in as <span sec:authentication="name"></span>
         <button type="submit" class="btn btn-warning"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign out</button>
       </form>
     </div>
-    
+    <div id="btns">
+    <form id = "twitter" action="#" th:object="${event}" th:action="@{/events/twitterButton}" th:method="get">
+        <button id="twitter" class="fa fa-twitter" type="submit" >Connect to twitter!</button>
+      </form>
+      <a id="home" class="btn btn-success" role="button" th:href="@{/}">
+        <i class="fa fa-home"></i> Home
+      </a>
+      </div>
     <div class="container">
     	<div class="alert alert-success alert-dismissible" role="alert" th:if="${ok_message}">
       		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
