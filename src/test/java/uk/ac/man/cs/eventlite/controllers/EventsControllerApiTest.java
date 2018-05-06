@@ -101,7 +101,7 @@ public class EventsControllerApiTest {
 		when(eventService.findById(id)).thenReturn(e);
 
 		mvc.perform(get("/api/events/{id}", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(handler().methodName("getEvent")).andExpect(jsonPath("$.length()", equalTo(5)))
+				.andExpect(handler().methodName("getEvent")).andExpect(jsonPath("$.length()", equalTo(6)))
 				.andExpect(jsonPath("$._links.self.href", endsWith("/events/"+ id)))
 				.andExpect(jsonPath("$._links.event.href", endsWith("/events/"+ id)))
 				.andExpect(jsonPath("$._links.venue.href", endsWith("/events/"+ id + "/venue")));
@@ -122,7 +122,7 @@ public class EventsControllerApiTest {
 		when(venueService.findById(id)).thenReturn(v);
 
 		mvc.perform(get("/api/events/{id}/venue", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(6)))
+				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(8)))
 				.andExpect(jsonPath("$._links.self.href", endsWith("/venues/"+ id)));
 		
 		verify(venueService).findById(id);

@@ -164,6 +164,11 @@ public class EventsController {
 	//Only whole event names match as per the specification
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchEventByName(@RequestParam(value = "search", required = false) String name, Model model) {
+		
+		if (name == null) {
+			name = "";
+		}
+		
         model.addAttribute("search", eventService.listEventsByName(name));
         model.addAttribute("searchNew", eventService.listEventsByNameUpcoming(name));
         model.addAttribute("searchOld", eventService.listEventsByNamePrevious(name));
