@@ -13,7 +13,7 @@
   	    padding: 1em;
   	    border: 1px solid #c1c1c1;
   	    margin-top: 2rem;
-        height: 600px;
+        height: 800px;
         width: 500px;
         float: left;
    }
@@ -72,6 +72,7 @@
     text-decoration: none;
     background: #55ACEE;
     color: white;
+    float: right;
 }
   </style>
 </head>
@@ -94,19 +95,20 @@
       
       <label id="label">Description :</label>
       <p th:text="${event.description}"> </p>
+      <div>
+            <form action="#" th:action="@{/events/tweet}" th:method="get">
+            <label> Share the event:</label>
+		    <textarea th:field="*{text}" th:value="${text}" th:placeholder="${event.name}">
+            </textarea>
+            <button id="tweet" class="fa fa-twitter" type="submit" >Tweet</button>
+            </form>
+            </div>
       </div>
             <form th:action="@{/events/{num}(num=${event.id})}" th:method="delete">
             <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
             </form>
             <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
-            <div>
-            <form action="#" th:action="@{/events/tweet}" th:method="get">
-            <label> Share the event:</label>
-		    <textarea th:field="*{text}" th:value="${text}">
-            </textarea>
-            <button id="tweet" class="fa fa-twitter" type="submit" >Tweet</button>
-            </form>
-            </div>
+            
       </div>
 
     <div id="map">Map goes here</div>
