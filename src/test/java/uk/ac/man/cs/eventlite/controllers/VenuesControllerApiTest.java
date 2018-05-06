@@ -96,7 +96,7 @@ public class VenuesControllerApiTest {
 		when(venueService.findById(id)).thenReturn(v);
 
 		mvc.perform(get("/api/venues/{id}", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(6)))
+				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(8)))
 				.andExpect(jsonPath("$._links.self.href", endsWith("/venues/"+ id)))
 				.andExpect(jsonPath("$._links.venue.href", endsWith("/venues/"+ id)))
 				.andExpect(jsonPath("$._links.events.href", endsWith("/venues/"+ id + "/events")))
