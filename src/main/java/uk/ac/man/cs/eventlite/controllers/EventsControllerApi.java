@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @RestController
 @RequestMapping(value = "/api/events", produces = { MediaType.APPLICATION_JSON_VALUE, MediaTypes.HAL_JSON_VALUE })
@@ -33,6 +35,9 @@ public class EventsControllerApi {
 
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+	private VenueService venueService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public Resources<Resource<Event>> getAllEvents() {
@@ -45,6 +50,16 @@ public class EventsControllerApi {
     public ResponseEntity<?> deleteEvent(@PathVariable("id") long id) {
       eventService.delete(id);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Resource<Event> getEvent(@PathVariable("id") long id) {
+    	return eventToResource(eventService.findById(id));
+    }
+    
+    @RequestMapping(value = "/{id}/venue", method = RequestMethod.GET)
+    public Resource<Venue> getVenue(@PathVariable("id") long id) {
+    	return venueToResource(venueService.findById((eventService.findById(id).getVenue().getId())));
     }
     
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -74,8 +89,10 @@ public class EventsControllerApi {
     
 	private Resource<Event> eventToResource(Event event) {
 		Link selfLink = linkTo(EventsControllerApi.class).slash(event.getId()).withSelfRel();
+		Link eventLink = linkTo(EventsControllerApi.class).slash(event.getId()).withRel("event");
+		Link venueLink = linkTo(EventsControllerApi.class).slash(event.getId()).slash("venue").withRel("venue");
 
-		return new Resource<Event>(event, selfLink);
+		return new Resource<Event>(event, selfLink, eventLink, venueLink);
 	}
 
 	private Resources<Resource<Event>> eventToResource(Iterable<Event> events) {
@@ -89,4 +106,9 @@ public class EventsControllerApi {
 		return new Resources<Resource<Event>>(resources, selfLink);
 	}
 	
+	private Resource<Venue> venueToResource(Venue venue) {
+		Link selfLink = linkTo(VenuesControllerApi.class).slash(venue.getId()).withSelfRel();
+
+		return new Resource<Venue>(venue, selfLink);
+	}
 }

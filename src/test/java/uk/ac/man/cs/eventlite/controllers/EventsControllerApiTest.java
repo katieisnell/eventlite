@@ -36,7 +36,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.EventLite;
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = EventLite.class)
@@ -52,6 +54,9 @@ public class EventsControllerApiTest {
 
 	@Mock
 	private EventService eventService;
+	
+	@Mock
+	private VenueService venueService;
 
 	@InjectMocks
 	private EventsControllerApi eventsController;
@@ -82,9 +87,45 @@ public class EventsControllerApiTest {
 		mvc.perform(get("/api/events").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(handler().methodName("getAllEvents")).andExpect(jsonPath("$.length()", equalTo(2)))
 				.andExpect(jsonPath("$._links.self.href", endsWith("/api/events")))
-				.andExpect(jsonPath("$._embedded.events.length()", equalTo(1)));
-
+				.andExpect(jsonPath("$._embedded.events.length()", equalTo(1)))
+				.andExpect(jsonPath("$._embedded.events[0]._links.venue.href", endsWith("events/0/venue")));
+		
 		verify(eventService).findAll();
+	}
+	
+	@Test
+	public void getEvent() throws Exception {
+		int id = 0;
+		Event e = new Event();
+		e.setId(id);
+		when(eventService.findById(id)).thenReturn(e);
+
+		mvc.perform(get("/api/events/{id}", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(handler().methodName("getEvent")).andExpect(jsonPath("$.length()", equalTo(5)))
+				.andExpect(jsonPath("$._links.self.href", endsWith("/events/"+ id)))
+				.andExpect(jsonPath("$._links.event.href", endsWith("/events/"+ id)))
+				.andExpect(jsonPath("$._links.venue.href", endsWith("/events/"+ id + "/venue")));
+		
+		verify(eventService).findById(id);
+	}
+	
+	@Test
+	public void getVenueInEvent() throws Exception 
+	{
+		int id = 0;
+		Event e = new Event();
+		Venue v = new Venue();
+		e.setId(id);
+		e.setVenue(v);
+		v.setId(id);
+		when(eventService.findById(id)).thenReturn(e);
+		when(venueService.findById(id)).thenReturn(v);
+
+		mvc.perform(get("/api/events/{id}/venue", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(6)))
+				.andExpect(jsonPath("$._links.self.href", endsWith("/venues/"+ id)));
+		
+		verify(venueService).findById(id);
 	}
 	
 	@Test
