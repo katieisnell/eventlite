@@ -25,7 +25,7 @@
     <h2>Search for Events</h2>
     <form action="#" th:object="${event}" th:action="@{/events/search}" th:method="get">
         <input id = "search" type="text" name="search"/>
-        <a th:href="@{/events/search}"><input type="submit" value="Search!" class="btn btn-success"/></a>
+        <button type="submit" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search! </button>
     </form>
 	</div>
 	

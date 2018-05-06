@@ -3,6 +3,11 @@
   layout:decorate="~{layouts/default}">
 <head>
   <title>All</title>
+   <style>
+  #search{
+        width: 30%;
+       }
+  </style>
 </head>
 <body>
   <div layout:fragment="content">
@@ -12,7 +17,7 @@
     <h2>Search for Venues</h2>
     <form action="#" th:object="${venue}" th:action="@{/venues/search}" th:method="get">
         <input type="text" name="search" id="search"/>
-        <a th:href="@{/venues/search}"><input type="submit" value="Search!" class="btn btn-success"/></a>
+        <button type="submit" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search! </button>
     </form>
 	</div>
 

@@ -21,32 +21,30 @@
     opacity: 0.7;
   }
   #home{
-    margin-top: 0.3rem;
-    float:right;
-    margin-right: 50px;
+  margin-right: 500px;
     }
-    #btns{
-    float:right;
-    width: 100%;
+    .btns{
+    display:inline-block;
+    margin-right: 50px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div sec:authorize="!isAuthenticated()">
+    <div class="btns" sec:authorize="!isAuthenticated()">
       <i class="fa fa-user" aria-hidden="true"></i> Not signed in
       <a class="btn btn-default navbar-btn" role="button" th:href="@{/sign-in}">
         <i class="fa fa-sign-in" aria-hidden="true"></i> Sign in
       </a>
     </div>
-    <div class="log" sec:authorize="isAuthenticated()">
+    <div  class="btns"  sec:authorize="isAuthenticated()">
       <form th:action="@{/sign-out}" method="post">
         <i class="fa fa-user" aria-hidden="true"></i> Signed in as <span sec:authentication="name"></span>
         <button type="submit" class="btn btn-warning"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign out</button>
       </form>
     </div>
-    <div id="btns">
+    <div class="btns">
     <form id = "twitter" action="#" th:object="${event}" th:action="@{/events/twitterButton}" th:method="get">
         <button id="twitter" class="fa fa-twitter" type="submit" >Connect to twitter!</button>
       </form>
