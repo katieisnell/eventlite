@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.social.MissingAuthorizationException;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Tweet;
@@ -60,15 +62,29 @@ public class EventsController {
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
 		
+		
+		List<Tweet> tweets = new ArrayList<Tweet>();
+		
+		
+		try{
+			model.addAttribute(twitter.userOperations().getUserProfile());
+			tweets = twitter.timelineOperations().getUserTimeline(5);
+		}
+		catch(MissingAuthorizationException e) {};
+		
+		model.addAttribute("tweets", tweets);
+        
+
+		return "events/index";
+	}
+	
+	@RequestMapping(value="/twitterButton", method = RequestMethod.GET)
+	public String twitterButton(Model model) {
 		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
             return "redirect:/connect/twitter";
         }
-
-        model.addAttribute(twitter.userOperations().getUserProfile());
-        List<Tweet> tweets = twitter.timelineOperations().getUserTimeline(5);
-        model.addAttribute("tweets", tweets);
-
-		return "events/index";
+		else
+			return "redirect:/events";
 	}
 
 	 @RequestMapping(value="/tweet", method = RequestMethod.GET)

@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.social.twitter.api.TimelineOperations;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.UserOperations;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -94,6 +99,15 @@ public class EventsControllerTest {
 	
 	@Mock
 	private Twitter twitter;
+	
+	@Mock
+	private UserOperations userOperations;
+	
+	@Mock
+	private TimelineOperations timelineOperations;
+
+	@Mock
+	private TwitterProfile twitterProfile;
 
 	@InjectMocks
 	private EventsController eventsController;
@@ -108,8 +122,8 @@ public class EventsControllerTest {
 	
 	@Test
 	public void isAuthorizedForUser() {
-		TwitterTemplate twitter = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
-		assertTrue(twitter.isAuthorized());
+		TwitterTemplate twitterTemplate = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
+		assertTrue(twitterTemplate.isAuthorized());
 	}
 
 	@Test
@@ -117,8 +131,12 @@ public class EventsControllerTest {
 		when(eventService.findAll()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
 		
-		TwitterTemplate twitter = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
-		assertTrue(twitter.isAuthorized());
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
+		
 		
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -132,6 +150,11 @@ public class EventsControllerTest {
 	public void getIndexWhenNoFutureEvents() throws Exception {
 		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -146,6 +169,11 @@ public class EventsControllerTest {
 	public void getIndexWhenNoPastEvents() throws Exception {
 		when(eventService.findPastEvents()).thenReturn(Collections.<Event> emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue> emptyList());
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -160,6 +188,11 @@ public class EventsControllerTest {
 	public void getIndexWithEvents() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -380,6 +413,11 @@ public class EventsControllerTest {
 	public void getIndexWithFutureEvents() throws Exception {
 		when(eventService.findFutureEvents()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
@@ -394,6 +432,11 @@ public class EventsControllerTest {
 	public void getIndexWithPastEvents() throws Exception {
 		when(eventService.findPastEvents()).thenReturn(Collections.<Event> singletonList(event));
 		when(venueService.findAll()).thenReturn(Collections.<Venue> singletonList(venue));
+		
+		when(twitter.userOperations()).thenReturn(userOperations);
+		when(userOperations.getUserProfile()).thenReturn(twitterProfile);
+		when(twitter.timelineOperations()).thenReturn(timelineOperations);
+		when(timelineOperations.getUserTimeline(5)).thenReturn(new ArrayList<Tweet>());
 
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));

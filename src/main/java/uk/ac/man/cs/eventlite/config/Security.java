@@ -40,7 +40,7 @@ public class Security extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().disable();
 		
 		//DISABLED FOR TESTING
-		http.csrf().disable();
+		//http.csrf().disable();
 	}
 
 	@Autowired
