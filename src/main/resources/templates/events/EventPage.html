@@ -5,24 +5,34 @@
 <head>
   <title>Event Details</title>
    <style>
+     
   * {
   box-sizing: border-box;
 }
+	#map {
+  	    padding: 1em;
+  	    border: 1px solid #c1c1c1;
+  	    margin-top: 2rem;
+        height: 600px;
+        width: 500px;
+        float: left;
+       }
   #form1 {
   padding: 1em;
   background: #f9f9f9;
   border: 1px solid #c1c1c1;
   margin-top: 2rem;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  float: right;
+
   padding: 1em;
  }
 
   h1{
   text-align: center;
  }
-  @media (min-width: 400px) {
+  @media (min-width: 500px) 
+  
   div {
     overflow: hidden;
   }
@@ -49,7 +59,6 @@
 <body>
   <div layout:fragment="content">
     <h1>Event Details</h1>
-
       <div id = "form1" th:object="${event}">
       <div>
       <label for="name">Event :</label>
@@ -72,6 +81,55 @@
             </form>
             <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
       </div>
+
+    <div id="map">Map goes here</div>
+        <script th:inline="javascript">
+      function initMap() 
+      {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 53.483959, lng: -2.244644}
+        });
+        
+        var geocoder = new google.maps.Geocoder();
+
+		var latitude = [[${event.venue.latitude}]];
+		
+		var longitude = [[${event.venue.longitude}]];	
+
+		var eventName = [[${event.name}]];
+		
+		var date = [[${event.date}]];
+		
+		var time = [[${event.time}]];
+		
+		var venue = [[${event.venue.name}]];
+    	
+    	var marker = new google.maps.Marker({
+          position: {lat: latitude, lng: longitude},
+          map: map,
+          title: eventName,
+          label: eventName
+        });
+		
+		
+		var infoWindowContent = '<h4>Event name:' + eventName + '</h4><br>' +
+		  '<h5>Date: </h5>' + date + '<br>' +
+		  '<h5>Time: </h5>' + time + '</h5><br>' +
+		  '<h5>Venue: </h5>' + venue;
+		var infoWindow = new google.maps.InfoWindow({content: infoWindowContent});
+
+		google.maps.event.addListener(marker, 'click', (function(marker, content,infoWindow) {
+			return function() {
+				infoWindow.setContent(content);
+				infoWindow.open(map, marker);
+			}
+		})(marker, infoWindowContent,infoWindow));
+      }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUk8QtlJRZ4_-o4YRacu59TUZuA6X1Qm8&callback=initMap"
+  	type="text/javascript"></script>
 
   </div>
 

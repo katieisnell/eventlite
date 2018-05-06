@@ -390,4 +390,47 @@ public class EventsControllerTest {
 		verifyZeroInteractions(venue);
 	}
 	
+  @Test
+  public void postLongerNameEvent() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        .param("name", TOOLONG)
+        .accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+    .andExpect(view().name("events/new"))
+    .andExpect(model().attributeHasFieldErrors("event", "name"))
+    .andExpect(handler().methodName("createEvent"));
+
+    verify(eventService, never()).save(event);
+  }
+  
+	@Test
+	public void createEventLongDescription() throws Exception
+	{
+		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("name", "EventName")
+				.param("date", "2019-01-01").param("time","10:30").param("description", TOOLONG)
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isOk()).andExpect(view().name("events/new"))
+		.andExpect(model().attributeHasFieldErrors("event", "description"))
+		.andExpect(handler().methodName("createEvent"))
+		.andExpect(flash().attributeCount(0));
+
+		verify(eventService, never()).save(event);
+	}
+	
+	@Test
+	public void postEmptyDateEvent() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/events").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1").param("name", "EventName")
+				.param("time","10:30").param("description", "ok!").accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+		.andExpect(view().name("events/new"))
+		.andExpect(model().attributeHasFieldErrors("event", "date"))
+		.andExpect(handler().methodName("createEvent"));
+
+		verify(eventService, never()).save(event);
+	}
+  
+  
+	
 }
