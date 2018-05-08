@@ -130,6 +130,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		eventApple.setVenue(VenueC);
 		Date appleDate = new Date(118, 07, 12, 00, 00);
 		eventApple.setDate(appleDate); // (year + 1900, month, day, hour, minute)
+		eventApple.setTime(appleDate);
 		
 		/* Week 6: Event to show "Upcoming 3 events" is working */
 		Event eventExtra = new Event();
