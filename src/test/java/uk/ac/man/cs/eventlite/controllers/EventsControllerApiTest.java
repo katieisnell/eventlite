@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -30,15 +29,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.EventLite;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.entities.Venue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = EventLite.class)
@@ -108,32 +104,4 @@ public class EventsControllerApiTest {
 		
 		verify(eventService).findById(id);
 	}
-	
-	@Test
-	public void getVenueInEvent() throws Exception 
-	{
-		int id = 0;
-		Event e = new Event();
-		Venue v = new Venue();
-		e.setId(id);
-		e.setVenue(v);
-		v.setId(id);
-		when(eventService.findById(id)).thenReturn(e);
-		when(venueService.findById(id)).thenReturn(v);
-
-		mvc.perform(get("/api/events/{id}/venue", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(handler().methodName("getVenue")).andExpect(jsonPath("$.length()", equalTo(8)))
-				.andExpect(jsonPath("$._links.self.href", endsWith("/venues/"+ id)));
-		
-		verify(venueService).findById(id);
-	}
-	
-	@Test
-  public void deletEvent() throws Exception {
-      mvc.perform(
-             MockMvcRequestBuilders.delete("/api/events/1").with(user("Rob").roles(Security.ADMIN_ROLE))
-             .contentType(MediaType.APPLICATION_JSON)
-             .content("{ \"name\": \"\" }").accept(MediaType.APPLICATION_JSON))
-     .andExpect(status().isNoContent());
-  }
 }

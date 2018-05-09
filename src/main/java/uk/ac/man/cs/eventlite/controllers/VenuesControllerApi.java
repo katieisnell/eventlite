@@ -6,6 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,27 +54,21 @@ public class VenuesControllerApi {
 
 		return new Resource<Venue>(venue, selfLink, venueLink, eventsLink, next3EvLink);
 	}
-
-    @RequestMapping(value = "/{id}/events", method = RequestMethod.GET)
-    public Resources<Resource<Event>> getEvents(@PathVariable("id") long id) {
-    	return eventToResource(venueService.findById(id).getEvents());
-    }
     
     @RequestMapping(value = "/{id}/next3events", method = RequestMethod.GET)
     public Resources<Resource<Event>> get3Events(@PathVariable("id") long id) {
-    	return event3ToResource(venueService.findById(id).getEvents());
+    	return event3ToResource(venueService.findById(id).getEvents(), id);
     }
 	
 	private Resources<Resource<Venue>> venueToResource(Iterable<Venue> venues) {
 		Link selfLink = linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel();
-//		Link profileLink = linkTo(VenuesControllerApi.class).slash("profile").withRel("profile");
 
 		List<Resource<Venue>> resources = new ArrayList<Resource<Venue>>();
 		for (Venue venue : venues) {
 			resources.add(venueToResource(venue));
 		}
 
-		return new Resources<Resource<Venue>>(resources, selfLink);//, profileLink);
+		return new Resources<Resource<Venue>>(resources, selfLink);
 	}
 	
 	private Resource<Event> eventToResource(Event event) {
@@ -82,18 +77,8 @@ public class VenuesControllerApi {
 		return new Resource<Event>(event, selfLink);
 	}
 	
-	private Resources<Resource<Event>> eventToResource(Iterable<Event> events) {
-		Link selfLink = linkTo(methodOn(EventsControllerApi.class).getAllEvents()).withSelfRel();
-
-		List<Resource<Event>> resources = new ArrayList<Resource<Event>>();
-		for (Event event : events) {
-			resources.add(eventToResource(event));
-		}
-
-		return new Resources<Resource<Event>>(resources, selfLink);
-	}
-	
-	private Resources<Resource<Event>> event3ToResource(List<Event> events) {
+	private Resources<Resource<Event>> event3ToResource(List<Event> events, long id) 
+	{
 		
 		Collections.sort(events, new Comparator<Event>() {
 			  public int compare(Event o1, Event o2) {
@@ -101,14 +86,14 @@ public class VenuesControllerApi {
 			  }
 			});
 		
-		Link selfLink = linkTo(methodOn(EventsControllerApi.class).getAllEvents()).withSelfRel();
+		Link selfLink = linkTo(methodOn(VenuesControllerApi.class).get3Events(id)).withSelfRel();
 
 		int index = 0;
 		
 		List<Resource<Event>> resources = new ArrayList<Resource<Event>>();
 		
 		for (Event event : events) {
-			if(index == 3) break;
+			if(index == 3 || event.getDate().before(new Date())) break;
 			resources.add(eventToResource(event));
 			index++;
 		}
