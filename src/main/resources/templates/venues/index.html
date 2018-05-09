@@ -27,6 +27,9 @@
           <th>Name</th>
           <th>Address</th>
           <th>Capacity</th>
+          <div sec:authorize="isAuthenticated()">
+          <th><i class="fa fa-edit"></i> Update</th>
+    	  </div>
         </tr>
       </thead>
       <tbody>
@@ -35,14 +38,14 @@
           <td th:text="${v.roadName} + ',' + ${v.postcode}">Venue address</td>
           <td th:text="${v.capacity}">Venue capacity</td>
           <td>
-          <a class="btn btn-primary" role="button" th:href="@{'/venues/'+ ${v.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
+          <a class="btn btn-primary" role="button" th:href="@{'/venues/'+ ${v.id}}" sec:authorize="isAuthenticated()"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
           </td>
         </tr>
       </tbody>
     </table>
 
     <p>
-      <a class="btn btn-primary" role="button" href="/venues/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new venue</a>
+      <a class="btn btn-primary" role="button" href="/venues/new" sec:authorize="isAuthenticated()"><i class="fa fa-plus" aria-hidden="true"></i> Add a new venue</a>
     </p>
   </div>
 </body>

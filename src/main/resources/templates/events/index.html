@@ -1,7 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default}">
+      layout:decorate="~{layouts/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      
 <head>
   <title>All events</title>
   <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
@@ -21,6 +23,11 @@
   <div layout:fragment="content">
     <h1>All events</h1>
     
+    <div sec:authorize="isAuthenticated()">
+    Welcome organiser...
+    </div>
+   
+    
     <div class="container">
     <h2>Search for Events</h2>
     <form action="#" th:object="${event}" th:action="@{/events/search}" th:method="get">
@@ -37,7 +44,10 @@
           <th><i class="fa fa-map-marker"></i> Venue</th>
           <th><i class="fa fa-calendar"></i> Date</th>
           <th><i class="fa fa-clock-o"></i> Time</th>
+          <div sec:authorize="isAuthenticated()">
           <th><i class="fa fa-edit"></i> Update</th>
+    	  </div>
+          
         </tr>
       </thead>
       <tbody>
@@ -47,14 +57,14 @@
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
           <td>
-          <a class="btn btn-primary" role="button" th:href="@{'/events/'+ ${e.id}}"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
+          <a class="btn btn-primary" role="button" th:href="@{'/events/'+ ${e.id}}" sec:authorize="isAuthenticated()"><i class="fa fa-edit" aria-hidden="true"></i> Update</a>
           </td>
         </tr>
       </tbody>
     </table>
     
     <p>
-      <a class="btn btn-primary" role="button" type="submit" href="/events/new"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
+      <a class="btn btn-primary" role="button" type="submit" href="/events/new" sec:authorize="isAuthenticated()"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
     </p>
     
     <h1>Previous events</h1>
