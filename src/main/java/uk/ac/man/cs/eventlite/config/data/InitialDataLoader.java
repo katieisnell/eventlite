@@ -35,39 +35,39 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			return;
 		}
 		Venue VenueZ = new Venue();
-		VenueZ.setName("Venue Z");
+		VenueZ.setName("Manchester Arena");
 		VenueZ.setCapacity(50);
-		VenueZ.setRoadName("53 Manchester Road");
-		VenueZ.setPostcode("E15 3BD");
-		VenueZ.setLatitude(53.473313);
-		VenueZ.setLongitude(-2.146949);
+		VenueZ.setRoadName("Victoria Station");
+		VenueZ.setPostcode("M3 1AR");
+		VenueZ.setLatitude(53.488221);
+		VenueZ.setLongitude(-2.243802);
 		venueService.save(VenueZ);
 
 		Venue VenueA = new Venue();
-		VenueA.setName("Venue A");
+		VenueA.setName("O2 Ritz");
 		VenueA.setCapacity(50);
-		VenueA.setRoadName("23 Manchester Road");
-		VenueA.setPostcode("E14 3BD");
-		VenueA.setLatitude(51.487689);
-		VenueA.setLongitude(-0.012200);
+		VenueA.setRoadName("Whitworth St W");
+		VenueA.setPostcode("M1 5NQ");
+		VenueA.setLatitude(53.474382);
+		VenueA.setLongitude(-2.242952);
 		venueService.save(VenueA);
 
 		Venue VenueB = new Venue();
-		VenueB.setName("Venue B");
+		VenueB.setName("O2 Apollo");
 		VenueB.setCapacity(1000);
-		VenueB.setRoadName("Highland Road");
-		VenueB.setPostcode("S43 2EZ");
-		VenueB.setLatitude(53.279973);
-		VenueB.setLongitude(-1.401754);
+		VenueB.setRoadName("Stockport Rd");
+		VenueB.setPostcode("M12 6AP");
+		VenueB.setLatitude(53.470034);
+		VenueB.setLongitude(-2.220959);
 		venueService.save(VenueB);
 		
 		Venue VenueC = new Venue();
-		VenueC.setName("Venue C");
+		VenueC.setName("Albert Hall");
 		VenueC.setCapacity(10);
-		VenueC.setRoadName("19 Acacia Avenue");
-		VenueC.setPostcode("WA15 8QY");
-		VenueC.setLatitude(53.382103);
-		VenueC.setLongitude(-2.337370);
+		VenueC.setRoadName("27 Peter St");
+		VenueC.setPostcode("M2 5QR");
+		VenueC.setLatitude(53.478540);
+		VenueC.setLongitude(-2.246704);
 		venueService.save(VenueC);
 		
 		
