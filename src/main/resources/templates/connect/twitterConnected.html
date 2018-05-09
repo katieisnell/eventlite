@@ -1,13 +1,20 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Hello Twitter</title>
+		<title>Twitter connect</title>
 	</head>
 	<body>
-		<h3>Connected to Twitter</h3>
+		<div layout:fragment="content">
+  	<div class="container">  
+		<h1>Connected to Twitter</h1>
 
 		<p>
 			You are now connected to your Twitter account.
-			Click <a href="/events">here</a> to see your Twitter friends.
+			Click <a href="/events">here</a> to see EventLite's events.
 		</p>
+		</div>
+		</div>
 	</body>
 </html>
