@@ -19,12 +19,9 @@
    }
   #form1 {
   padding: 1em;
-  background: #f9f9f9;
-  border: 1px solid #c1c1c1;
   margin-top: 2rem;
   max-width: 600px;
   float: right;
-
   padding: 1em;
  }
 
@@ -52,7 +49,7 @@
   width: calc(100% - 200px);
   }
     #delete{
-  width: calc(100% - 200px);
+  width: calc(100%);
   }
      textarea{
     float: left;
@@ -78,37 +75,39 @@
 </head>
 <body>
   <div layout:fragment="content">
+  <div class="container">
+    
     <h1>Event Details</h1>
       <div id = "form1" th:object="${event}">
       <div>
-      <label for="name">Event :</label>
+      <label for="name">Event </label>
       <p th:text="${event.name}"> </p>
       
-      <label for="venue" id="venueLabel">Venue :</label>
+      <label for="venue" id="venueLabel">Venue </label>
       <a th:href="@{../venues/venue(vname=${event.venue.id})}"> <p th:text="${event.venue.name}"> </p> </a>
       
-      <label for="date">Event date :</label>
+      <label for="date">Event date </label>
       <p th:text="${event.date}"> </p>
       
-      <label for="time">Event time :</label>
+      <label for="time">Event time </label>
       <p th:text="${event.time}"> </p>
       
-      <label id="label">Description :</label>
+      <label id="label">Description </label>
       <p th:text="${event.description}"> </p>
       <div>
             <form action="#" th:action="@{/events/tweet}" th:method="get">
-            <label> Share the event:</label>
+            <label> Share the event </label>
 		    <textarea th:field="*{text}" th:value="${text}" th:placeholder="${event.name}">
             </textarea>
             <button id="tweet" class="fa fa-twitter" type="submit" >Tweet</button>
             </form>
             </div>
       </div>
+      <br>
             <form th:action="@{/events/{num}(num=${event.id})}" th:method="delete">
-            <button id="delete" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
+            <button id="delete" type="submit" class="btn btn-danger" sec:authorize="isAuthenticated()"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
             </form>
-            <a id="a" class="btn btn-warning" role="button" href="/events"><i class="fa fa-ban" aria-hidden="true"></i>Back</a>
-            
+
       </div>
 
     <div id="map">Map goes here</div>

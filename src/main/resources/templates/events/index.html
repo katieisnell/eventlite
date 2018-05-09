@@ -21,22 +21,15 @@
 
 <body>
   <div layout:fragment="content">
-    <h1>All events</h1>
-    
-    <div sec:authorize="isAuthenticated()">
-    Welcome organiser...
-    </div>
-   
-    
-    <div class="container">
-    <h2>Search for Events</h2>
-    <form action="#" th:object="${event}" th:action="@{/events/search}" th:method="get">
-        <input id = "search" type="text" name="search"/>
-        <button type="submit" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search! </button>
+  <div class="container">
+  
+  <form action="#" th:object="${event}" th:action="@{/events/search}" th:method="get">
+        <input class="form-control" id = "search" type="text" name="search" th:placeholder="Search"/>
     </form>
-	</div>
-	
-    <h1>Upcoming events</h1>
+    
+    <h1>All events</h1>
+
+    <h2>Upcoming events</h2>
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -67,8 +60,7 @@
       <a class="btn btn-primary" role="button" type="submit" href="/events/new" sec:authorize="isAuthenticated()"><i class="fa fa-plus" aria-hidden="true"></i> Add a new event</a>
     </p>
     
-    <h1>Previous events</h1>
-
+    <h2>Previous events</h2>
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -90,6 +82,7 @@
 
     
     <div th:unless="${#lists.size(tweets) == 0}">
+    <h2>Twitter timeline</h2>
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -100,7 +93,7 @@
       <tbody>
         <tr th:each="t : ${tweets}">
 			<td th:text="${t.createdAt}">Date</td>
-			<td> <a th:href="'https://twitter.com/EventLiteG02_18/status/' + ${t.idStr}" <p th:text="${t.text}">Tweet</td>
+			<td> <a th:href="'https://twitter.com/EventLiteG02_18/status/' + ${t.idStr}" th:text="${t.text}">Tweet</a></td>
         </tr>
       </tbody>
     </table>

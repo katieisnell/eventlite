@@ -1,9 +1,14 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-		<title>Hello Twitter</title>
+		<title>Twitter connect</title>
 	</head>
 	<body>
-		<h3>Connect to Twitter</h3>
+	<div layout:fragment="content">
+  	<div class="container">  
+		<h1>Connect to Twitter</h1>
 		<span th:if="${social_provider_error}">Provider error (maybe you need to configure the app id and secret?)</span>
 		<form action="/connect/twitter" method="POST">
 			<input
@@ -12,9 +17,16 @@
 				th:value="${_csrf.token}" ?>
 				
 			<div class="formInfo">
-				<p>You aren't connected to Twitter yet. Click the button to connect this application with your Twitter account.</p>
+				<p>Click the button to connect your EventLite account with Twitter.</p>
 			</div>
-			<p><button type="submit">Connect to Twitter</button></p>
+			<p>
+			<!--<button type="submit">Connect to Twitter</button>-->
+			<button class="btn btn-primary" type="submit"><i class="fa fa-sign-in" aria-hidden="true"></i> Connect to Twitter</button>
+			</p>
 		</form>
+		
+		</div>
+		</div>
+		
 	</body>
 </html>
