@@ -1,7 +1,5 @@
-# COMP23412 EventLite
 ## COMP23412 Software Engineering, University of Manchester, UK
-### Robert Haines, Markel Vigo, Caroline Jay
+🎟 An event-sharing website written in Java using the Spring Framework
 
 #### Licence
-
 BSD licenced, see Licence.md.
